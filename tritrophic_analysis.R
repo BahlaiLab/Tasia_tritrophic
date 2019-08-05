@@ -1,7 +1,46 @@
-#test script
+#load bad breakup script
+source_github <- function(u) {
+  # load package
+  require(RCurl)
+  
+  # read script lines from website
+  script <- getURL(u, ssl.verifypeer = FALSE)
+  
+  # parase lines and evaluate in the global environment
+  eval(parse(text = script))
+}
 
-a<-4
-b<-5
-c<-a+b
+source("https://raw.githubusercontent.com/BahlaiLab/bad_breakup_2/master/R_model/bad_breakup_script.R")
 
-c
+
+library(plyr)
+# Konza prairie- let's import the data
+
+#import data, assuming both blanks and periods are null values
+grassmass<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-knz.72.9&entityid=d7d500227665f76533332ebade88deeb", 
+                    header=T, na.strings=c("",".","NA"))
+
+
+#do some checks to see if R read the data correctly
+summary(grassmass)
+#we need to correct the transect values, in certain years, 'ni' was used as a treatment name instead of 'c' for control
+grassmass$TRANSECT<-as.factor(gsub("ni", "c", grassmass$TRANSECT))
+
+#we're interested in the LIVEGRASS and FORBS data. We need to turn each of these into a yearly metric
+#we want a metric by plot, year and TRANSECT because we expect irrigation treatment will probably
+#be very important re: plant productivity
+
+summary.grassmass<-ddply(grassmass, c("RECYEAR", "PLOT", "TRANSECT"), summarise,
+                               avg.LIVEGRASS=mean(LIVEGRASS), avg.FORBS=mean(FORBS))
+
+#let's create subsets on transect, and then on the response variables we're interested in
+
+grassmass.control<-summary.grassmass[which(summary.grassmass$TRANSECT=="c"),]
+grassmass.irrigated<-summary.grassmass[which(summary.grassmass$TRANSECT=="i"),]
+
+#get rid of the response variables we don't need
+grassmass.control.grass<-grassmass.control
+grassmass.control.grass$avg.FORBS<-NULL
+
+grassmass.control.forbs<-grassmass.control
+grassmass.control.forbs$avg.LIVEGRASS<-NULL
