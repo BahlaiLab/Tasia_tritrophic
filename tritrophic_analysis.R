@@ -42,9 +42,31 @@ summary.grassmass<-ddply(grassmass, c("RECYEAR", "PLOT", "TRANSECT"), summarise,
 grassmass.control<-summary.grassmass[which(summary.grassmass$TRANSECT=="c"),]
 grassmass.irrigated<-summary.grassmass[which(summary.grassmass$TRANSECT=="i"),]
 
-#get rid of the response variables we don't need
+#get rid of the response variables we don't need- for bad breakup we need it stripped to 
+#year, response
+
+#control grass
 grassmass.control.grass<-grassmass.control
 grassmass.control.grass$avg.FORBS<-NULL
+grassmass.control.grass$PLOT<-NULL
+grassmass.control.grass$TRANSECT<-NULL
 
+#control forbs
 grassmass.control.forbs<-grassmass.control
 grassmass.control.forbs$avg.LIVEGRASS<-NULL
+grassmass.control.forbs$PLOT<-NULL
+grassmass.control.forbs$TRANSECT<-NULL
+
+#irrigated grass
+grassmass.irrigated.grass<-grassmass.irrigated
+grassmass.irrigated.grass$avg.FORBS<-NULL
+grassmass.irrigated.grass$PLOT<-NULL
+grassmass.irrigated.grass$TRANSECT<-NULL
+
+#irrigated forbs
+grassmass.irrigated.forbs<-grassmass.irrigated
+grassmass.irrigated.forbs$avg.LIVEGRASS<-NULL
+grassmass.irrigated.forbs$PLOT<-NULL
+grassmass.irrigated.forbs$TRANSECT<-NULL
+
+pyramid_plot(grassmass.irrigated.forbs)
