@@ -12,6 +12,10 @@ source_github <- function(u) {
 
 source("https://raw.githubusercontent.com/BahlaiLab/bad_breakup_2/master/R_model/bad_breakup_script.R")
 
+#let's clean all these data up!
+#general procedure- import, check, fix obvious errors
+# then get summaries of our metrics of interest, with subsets on treatments which would
+#affect the dependant variables.
 
 library(plyr)
 # Konza prairie- let's import the data
