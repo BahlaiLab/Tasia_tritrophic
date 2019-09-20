@@ -110,7 +110,8 @@ hoppers1$S7<-NULL
 hoppers1$S8<-NULL
 hoppers1$S9<-NULL
 hoppers1$S10<-NULL
-#and spcode and soiltype
+#and spcode and soiltype and datacode
 hoppers1$SPCODE<-NULL
 hoppers1$SOILTYPE<-NULL
+hoppers1$DATACODE<-NULL
 
