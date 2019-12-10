@@ -114,4 +114,56 @@ hoppers1$S10<-NULL
 hoppers1$SPCODE<-NULL
 hoppers1$SOILTYPE<-NULL
 hoppers1$DATACODE<-NULL
+hoppers1$COMMENTS<-NULL
 
+#so it's apparent now that there's plenty of typoes in species names (MY NEMESIS)
+# let's start by making sure they're consistently capitalized
+library(Hmisc)
+hoppers1$SPECIES<-capitalize(as.character(hoppers1$SPECIES))
+
+#so what does our species list look like now?
+species.list<-sort(unique(hoppers1$SPECIES))
+species.list
+
+#take care of the typographical errors, multiple ways of saying spp
+
+hoppers1$SPECIES<-gsub("Ageneotett deorum", "Ageneotettix deorum", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Arphia species", "Arphia spp.", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Arphia xanthopterara", "Arphia xanthoptera", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Boopedon auriventr", "Boopedon auriventris", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Arphia xanthopte", "Arphia xanthoptera", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Brachystol magna", "Brachystola magna", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Campylacan olivacea", "Campylacantha olivacea", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Hadrotetti trifascia", "Hadrotettix trifasciatus", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Hesperotet speciosus", "Hesperotettix speciosus", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Hesperotet species", "Hesperotettix spp.", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Hesperotet spp.", "Hesperotettix spp.", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Hesperotet viridis", "Hesperotettix viridis", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Melanoplus bivittatu", "Melanoplus bivittatus", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Melanoplus bivittatuss", "Melanoplus bivittatus", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Melanoplus different", "Melanoplus differentialis", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Melanoplus femurrubr", "Melanoplus femurrubrum", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Melanoplus femurrubrumum", "Melanoplus femurrubrum", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Melanoplus sanguinip", "Melanoplus sanguinipes", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Melanoplus sanguinipeses", "Melanoplus sanguinipes", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Melanoplus species", "Melanoplus spp.", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Mermiria bivitatta", "Mermiria bivittata", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Mermiria species", "Mermiria spp.", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Orphullela speciosa", "Orphulella speciosa", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Paratylotr brunneri", "Paratylotropidia brunneri", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Paratylota brunneri", "Paratylotropidia brunneri", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Pardalopho apiculata", "Pardalophora apiculata", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Pardalopho haldemani", "Pardalophora haldemani", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Pardalopho spp.", "Pardalophora spp.", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Phoetaliot nebrascen", "Phoetaliotes nebrascensis", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Schistocer lineata", "Schistocerca lineata", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Schistocer obscura", "Schistocerca obscura", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Syrbula admirabilisis", "Syrbula admirabilis", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Syrbula admirabil", "Syrbula admirabilis", hoppers1$SPECIES)
+hoppers1$SPECIES<-gsub("Unknown ", "Unknown", hoppers1$SPECIES)
+
+#so what does our species list look like after cleaning?
+species.list<-sort(unique(hoppers1$SPECIES))
+species.list
+
+#so 58 species. That was a long time to get there, #otherpeoplesdata
