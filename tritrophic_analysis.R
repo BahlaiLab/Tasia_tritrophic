@@ -72,10 +72,10 @@ grassmass.irrigated.forbs$TRANSECT<-NULL
 #now let's write the intermediate cleaned data products into a folder
 
 #we want to encode the information about site and trophic level into the file name
-write.csv(grassmass.control.grass, file="cleaned_data/Konza_producer_control_grass.csv")
-write.csv(grassmass.control.forbs, file="cleaned_data/Konza_producer_control_forbs.csv")
-write.csv(grassmass.irrigated.grass, file="cleaned_data/Konza_producer_irrigated_grass.csv")
-write.csv(grassmass.irrigated.forbs, file="cleaned_data/Konza_producer_irrigated_forbs.csv")
+write.csv(grassmass.control.grass, file="cleaned_data/Konza_producer_control_grass.csv", row.names=FALSE)
+write.csv(grassmass.control.forbs, file="cleaned_data/Konza_producer_control_forbs.csv", row.names=FALSE)
+write.csv(grassmass.irrigated.grass, file="cleaned_data/Konza_producer_irrigated_grass.csv", row.names=FALSE)
+write.csv(grassmass.irrigated.forbs, file="cleaned_data/Konza_producer_irrigated_forbs.csv", row.names=FALSE)
 
 #ok, let's grasshopper this! the data has a BUNCH of issues we're going to have to address, 
 #but let's talk about that later and bring it in first
@@ -234,12 +234,12 @@ hoppers.ungrazed.o.s<-hoppers.ungrazed[c(1,4)]
 
 #all right,here we go, write the data
 
-write.csv(hoppers.grazed.total, file="cleaned_data/Konza_herbivore_grazed_grasshopper_total.csv")
-write.csv(hoppers.grazed.p.n, file="cleaned_data/Konza_herbivore_grazed_grasshopper_pn.csv")
-write.csv(hoppers.grazed.o.s, file="cleaned_data/Konza_herbivore_grazed_grasshopper_os.csv")
-write.csv(hoppers.ungrazed.total, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_total.csv")
-write.csv(hoppers.ungrazed.p.n, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_pn.csv")
-write.csv(hoppers.ungrazed.o.s, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_os.csv")
+write.csv(hoppers.grazed.total, file="cleaned_data/Konza_herbivore_grazed_grasshopper_total.csv", row.names=FALSE)
+write.csv(hoppers.grazed.p.n, file="cleaned_data/Konza_herbivore_grazed_grasshopper_pn.csv", row.names=FALSE)
+write.csv(hoppers.grazed.o.s, file="cleaned_data/Konza_herbivore_grazed_grasshopper_os.csv", row.names=FALSE)
+write.csv(hoppers.ungrazed.total, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_total.csv", row.names=FALSE)
+write.csv(hoppers.ungrazed.p.n, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_pn.csv", row.names=FALSE)
+write.csv(hoppers.ungrazed.o.s, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_os.csv", row.names=FALSE)
 
 #ok,time for the small mammals. This data is in a different format from the grasshoppes but at least
 #it seems to mostly be taken in the same spaces.
@@ -279,9 +279,9 @@ mammals.ungrazed.pm<-mammals.ungrazed[c(1,4)]
 
 #all right,here we go, write the data
 
-write.csv(mammals.grazed.total, file="cleaned_data/Konza_omnivore_grazed_mammal_total.csv")
-write.csv(mammals.grazed.pl, file="cleaned_data/Konza_omnivore_grazed_mammal_pl.csv")
-write.csv(mammals.grazed.pm, file="cleaned_data/Konza_omnivore_grazed_mammal_pm.csv")
-write.csv(mammals.ungrazed.total, file="cleaned_data/Konza_omnivore_ungrazed_mammal_total.csv")
-write.csv(mammals.ungrazed.pl, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pl.csv")
-write.csv(mammals.ungrazed.pm, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pm.csv")
+write.csv(mammals.grazed.total, file="cleaned_data/Konza_omnivore_grazed_mammal_total.csv", row.names=FALSE)
+write.csv(mammals.grazed.pl, file="cleaned_data/Konza_omnivore_grazed_mammal_pl.csv", row.names=FALSE)
+write.csv(mammals.grazed.pm, file="cleaned_data/Konza_omnivore_grazed_mammal_pm.csv", row.names=FALSE)
+write.csv(mammals.ungrazed.total, file="cleaned_data/Konza_omnivore_ungrazed_mammal_total.csv", row.names=FALSE)
+write.csv(mammals.ungrazed.pl, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pl.csv", row.names=FALSE)
+write.csv(mammals.ungrazed.pm, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pm.csv", row.names=FALSE)
