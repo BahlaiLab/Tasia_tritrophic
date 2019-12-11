@@ -285,3 +285,29 @@ write.csv(mammals.grazed.pm, file="cleaned_data/Konza_omnivore_grazed_mammal_pm.
 write.csv(mammals.ungrazed.total, file="cleaned_data/Konza_omnivore_ungrazed_mammal_total.csv", row.names=FALSE)
 write.csv(mammals.ungrazed.pl, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pl.csv", row.names=FALSE)
 write.csv(mammals.ungrazed.pm, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pm.csv", row.names=FALSE)
+
+# okay now the data is clean and in the format we need.  -_- At least for Konza.
+
+# That was somethin'. but- onward! we need to clean three more sites, haha :'S
+
+#######################################
+#let's do Hubbard Brook next
+
+#ugh, yeah the tree phenology data isn't going to work, but we could do two tropic levels- 
+#leps and birds
+
+hub.leps<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.82.7&entityid=c32446bad7211a5a1cfabf70c89baec8", 
+                    header=T, na.strings=c("",".","NA"))
+summary(hub.leps)
+#I think what's most relevant here is the number of individuals from all taxa and the biomass.
+#there is also four species of tree these data were collected from, so maybe divide up on that.
+#looks like there's probably unequal sampling between years so will have to account for that
+
+summary.hub.leps<-ddply(hub.leps, c("Year", "GridLetter", "GridNumber", "TreeSpecies"), summarise,
+                       individuals=mean(NumberIndividuals), biomass=mean(biomass))
+
+#looks like there's some missing data for sampling location, so let's ditch that
+
+summary.hub.leps<-summary.hub.leps[complete.cases(summary.hub.leps),]
+
+
