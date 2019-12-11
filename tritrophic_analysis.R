@@ -240,3 +240,48 @@ write.csv(hoppers.grazed.o.s, file="cleaned_data/Konza_herbivore_grazed_grasshop
 write.csv(hoppers.ungrazed.total, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_total.csv")
 write.csv(hoppers.ungrazed.p.n, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_pn.csv")
 write.csv(hoppers.ungrazed.o.s, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_os.csv")
+
+#ok,time for the small mammals. This data is in a different format from the grasshoppes but at least
+#it seems to mostly be taken in the same spaces.
+mammals<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-knz.88.7&entityid=1ced8529601926470f68c1d5eb708350", 
+                  header=T, na.strings=c("",".","NA"))
+#get totals so we can get rid of the extra columns
+
+mammals$TOTAL<- rowSums(mammals[7:20])
+
+#cull out the columns we don't need: Pm and Pl are our two most abundant species
+mammals1<-mammals[c(4,5,6,7,14,21)]
+
+#we want to sum things over the two samplings each year
+
+summary.mammals<-ddply(mammals1, c("RECYEAR", "WATERSHED.LINE"), summarise,
+                               TOTAL=sum(TOTAL), Pl=sum(Pl),Pm=sum(Pm))
+
+#cull out treatments with 2 and 4 year fire frequencies
+summary.mammals1<-summary.mammals[which(!grepl("2", summary.mammals$WATERSHED.LINE)),]
+summary.mammals2<-summary.mammals1[which(!grepl("4", summary.mammals1$WATERSHED.LINE)),]
+
+
+mammals.grazed<-summary.mammals2[which(grepl("N", summary.mammals2$WATERSHED.LINE)),]
+mammals.ungrazed<-summary.mammals2[which(!grepl("N", summary.mammals2$WATERSHED.LINE)),]
+
+mammals.grazed$WATERSHED.LINE<-NULL
+mammals.ungrazed$WATERSHED.LINE<-NULL
+
+mammals.grazed.total<-mammals.grazed[1:2]
+mammals.grazed.pl<-mammals.grazed[c(1,3)]
+mammals.grazed.pm<-mammals.grazed[c(1,4)]
+
+mammals.ungrazed.total<-mammals.ungrazed[1:2]
+mammals.ungrazed.pl<-mammals.ungrazed[c(1,3)]
+mammals.ungrazed.pm<-mammals.ungrazed[c(1,4)]
+
+
+#all right,here we go, write the data
+
+write.csv(mammals.grazed.total, file="cleaned_data/Konza_omnivore_grazed_mammal_total.csv")
+write.csv(mammals.grazed.pl, file="cleaned_data/Konza_omnivore_grazed_mammal_pl.csv")
+write.csv(mammals.grazed.pm, file="cleaned_data/Konza_omnivore_grazed_mammal_pm.csv")
+write.csv(mammals.ungrazed.total, file="cleaned_data/Konza_omnivore_ungrazed_mammal_total.csv")
+write.csv(mammals.ungrazed.pl, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pl.csv")
+write.csv(mammals.ungrazed.pm, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pm.csv")
