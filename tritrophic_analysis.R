@@ -166,4 +166,77 @@ hoppers1$SPECIES<-gsub("Unknown ", "Unknown", hoppers1$SPECIES)
 species.list<-sort(unique(hoppers1$SPECIES))
 species.list
 
-#so 58 species. That was a long time to get there, #otherpeoplesdata
+
+#so 58 species. That was a long time to get there, #otherpeoplesdata. Let's use reshape2 to
+#find out what our most abundant species are, by year
+#but first! R is not seeing the total column as numeric.
+hoppers1$TOTAL<-as.numeric(hoppers1$TOTAL)
+#and guess what?! site codes switch between capitalization patterns
+hoppers1$WATERSHED <- toupper(hoppers1$WATERSHED)
+#also, the hoppers data was all about disturbance regimes, but the intermediate disturbances
+#ie 2 and 4 year treatments are probably out of sync with anything going on in the primary 
+#productivity plots, so let's cut those out, and then divide the data into grazed/ungrazed (by mammmals)
+hoppers1<-hoppers1[which(hoppers1$WATERSHED!="002C"),]
+hoppers1<-hoppers1[which(hoppers1$WATERSHED!="002D"),]
+hoppers1<-hoppers1[which(hoppers1$WATERSHED!="004B"),]
+hoppers1<-hoppers1[which(hoppers1$WATERSHED!="004F"),]
+hoppers1<-hoppers1[which(hoppers1$WATERSHED!="N04A"),]
+hoppers1<-hoppers1[which(hoppers1$WATERSHED!="N04D"),]
+
+summary.hoppers.by.species<-ddply(hoppers1, c("SPECIES"), summarise,
+                       TOTAL=sum(TOTAL))
+summary.hoppers.by.year<-ddply(hoppers1, c("RECYEAR"), summarise,
+                                  TOTAL=sum(TOTAL))
+summary.hoppers.by.watershed<-ddply(hoppers1, c("WATERSHED"), summarise,
+                               TOTAL=sum(TOTAL))
+
+#sum of all hoppers, by year, watershed
+summary.hoppers.total<-ddply(hoppers1, c("RECYEAR", "WATERSHED"), summarise,
+                             TOTAL=sum(TOTAL))
+
+#get sum of each species by year, watershed
+summary.hoppers<-ddply(hoppers1, c("RECYEAR", "WATERSHED", "SPECIES"), summarise,
+                         TOTAL=sum(TOTAL))
+
+#two most common species are: 	Phoetaliotes nebrascensis, Orphulella speciosa
+
+P.nebrascensis<-summary.hoppers[which(summary.hoppers$SPECIES=="Phoetaliotes nebrascensis"),]
+P.nebrascensis$SPECIES<-NULL
+colnames(P.nebrascensis)[colnames(P.nebrascensis)=="TOTAL"] <- "P.nebrascensis"
+O.speciosa<-summary.hoppers[which(summary.hoppers$SPECIES=="Orphulella speciosa"),]
+O.speciosa$SPECIES<-NULL
+colnames(O.speciosa)[colnames(O.speciosa)=="TOTAL"] <- "O.speciosa"
+
+#merge those data in
+summary.hoppers.total<-merge(summary.hoppers.total, P.nebrascensis, by=c("RECYEAR", "WATERSHED"))
+summary.hoppers.total<-merge(summary.hoppers.total, O.speciosa, by=c("RECYEAR", "WATERSHED"), all.x = TRUE)
+
+#finally, there's one year that no O.speciosa was recoded in a plot- an implied zero
+#let's make it an explicit zero
+summary.hoppers.total[is.na(summary.hoppers.total)] <- 0
+
+#now we just need to divide the data into usable sets with year, response
+#for each treatment, we have grazed and ungrazed, total, and the two species of grasshoper, 
+#so 6 sets
+hoppers.grazed<-summary.hoppers.total[which(grepl("N", summary.hoppers.total$WATERSHED)),]
+hoppers.ungrazed<-summary.hoppers.total[which(!grepl("N", summary.hoppers.total$WATERSHED)),]
+
+hoppers.grazed$WATERSHED<-NULL
+hoppers.ungrazed$WATERSHED<-NULL
+
+hoppers.grazed.total<-hoppers.grazed[1:2]
+hoppers.grazed.p.n<-hoppers.grazed[c(1,3)]
+hoppers.grazed.o.s<-hoppers.grazed[c(1,4)]
+
+hoppers.ungrazed.total<-hoppers.ungrazed[1:2]
+hoppers.ungrazed.p.n<-hoppers.ungrazed[c(1,3)]
+hoppers.ungrazed.o.s<-hoppers.ungrazed[c(1,4)]
+
+#all right,here we go, write the data
+
+write.csv(hoppers.grazed.total, file="cleaned_data/Konza_herbivore_grazed_grasshopper_total.csv")
+write.csv(hoppers.grazed.p.n, file="cleaned_data/Konza_herbivore_grazed_grasshopper_pn.csv")
+write.csv(hoppers.grazed.o.s, file="cleaned_data/Konza_herbivore_grazed_grasshopper_os.csv")
+write.csv(hoppers.ungrazed.total, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_total.csv")
+write.csv(hoppers.ungrazed.p.n, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_pn.csv")
+write.csv(hoppers.ungrazed.o.s, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_os.csv")
