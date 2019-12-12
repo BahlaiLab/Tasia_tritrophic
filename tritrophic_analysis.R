@@ -310,4 +310,34 @@ summary.hub.leps<-ddply(hub.leps, c("Year", "GridLetter", "GridNumber", "TreeSpe
 
 summary.hub.leps<-summary.hub.leps[complete.cases(summary.hub.leps),]
 
+#strip out unnecessary columns
+summary.hub.leps$GridLetter<-NULL
+summary.hub.leps$GridNumber<-NULL
 
+#Divide it up by tree species
+hub.leps.viburnum<-summary.hub.leps[which(summary.hub.leps$TreeSpecies=="4"),]
+hub.leps.st.maple<-summary.hub.leps[which(summary.hub.leps$TreeSpecies=="3"),]
+hub.leps.su.maple<-summary.hub.leps[which(summary.hub.leps$TreeSpecies=="2"),]
+hub.leps.beech<-summary.hub.leps[which(summary.hub.leps$TreeSpecies=="1"),]
+
+#strip out the tree species column
+hub.leps.viburnum$TreeSpecies<-NULL
+hub.leps.st.maple$TreeSpecies<-NULL
+hub.leps.su.maple$TreeSpecies<-NULL
+hub.leps.beech$TreeSpecies<-NULL
+
+#oh my god, there's no data reported for viburnum or striped maple? Ok, let's leave (ha)
+#those out :/
+#divide data into biomass and abundance
+
+hub.leps.maple.biomass<-hub.leps.su.maple[c(1,3)]
+hub.leps.maple.individuals<-hub.leps.su.maple[c(1,2)]
+hub.leps.beech.biomass<-hub.leps.beech[c(1,3)]
+hub.leps.beech.individuals<-hub.leps.beech[c(1,2)]
+
+#and write it
+
+write.csv(hub.leps.maple.biomass, file="cleaned_data/Hubbard_herbivore_maple_biomass.csv", row.names=FALSE)
+write.csv(hub.leps.maple.individuals, file="cleaned_data/Hubbard_herbivore_maple_abundance.csv", row.names=FALSE)
+write.csv(hub.leps.beech.biomass, file="cleaned_data/Hubbard_herbivore_beech_biomass.csv", row.names=FALSE)
+write.csv(hub.leps.beech.individuals, file="cleaned_data/Hubbard_herbivore_beech_abundance.csv", row.names=FALSE)
