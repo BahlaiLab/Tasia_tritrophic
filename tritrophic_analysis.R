@@ -341,3 +341,36 @@ write.csv(hub.leps.maple.biomass, file="cleaned_data/Hubbard_herbivore_maple_bio
 write.csv(hub.leps.maple.individuals, file="cleaned_data/Hubbard_herbivore_maple_abundance.csv", row.names=FALSE)
 write.csv(hub.leps.beech.biomass, file="cleaned_data/Hubbard_herbivore_beech_biomass.csv", row.names=FALSE)
 write.csv(hub.leps.beech.individuals, file="cleaned_data/Hubbard_herbivore_beech_abundance.csv", row.names=FALSE)
+
+#ok, as a proxy for plant productivity, which is scattered accross numerous datasets,
+#hbr makes litterfall available, so let's take a look-see at the coverage of these data
+
+hub.litter<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.49.6&entityid=4f2ea33823ced1a36fb8f18c757aec6e", 
+                   header=T, na.strings=c("",".","NA", "-9999", "-9999.99", "-9999.9", "-99.00"))
+summary(hub.litter)
+
+#so I was hoping to break it out by species dry mass, but the data coverage is not super, so total dry
+#mass may be the thing. Since the lep data is only taken in beech and maple, let's just use hardwood
+#forest sites, and sites withour Ca addition
+
+hub.litter1<-hub.litter[which(hub.litter$TRTMT=="noCA"&hub.litter$COMP=="HW"),]
+#pull out the columns we need
+hub.litter2<- hub.litter1[c(3,4,5,6,9)]
+
+#looks like there's some missing data for sampling location, so let's ditch that
+
+hub.litter2<-hub.litter2[complete.cases(hub.litter2),]
+
+#ok, differing number of samples each year. Sheesh. ok, let's see if the number of samples matters
+
+summary.hub.litter<-ddply(hub.litter2, c("YEAR", "SITE", "ELEV"), summarise,
+                        Avlitter=mean(DRY_MASS), totlitter=sum(DRY_MASS), samples=length(DRY_MASS))
+
+#looks like number of samples is strongly positively correlated with total samples but average leaf litter
+#is not, so let's use the average, and there's no apparent site or elevation effects so they can be our 
+#subsamples, and we'll just have one response measured for this level
+
+hub.litter.mass<-summary.hub.litter[c(1,4)]
+
+#and write it
+write.csv(hub.litter.mass, file="cleaned_data/Hubbard_producer_litter_mass.csv", row.names=FALSE)
