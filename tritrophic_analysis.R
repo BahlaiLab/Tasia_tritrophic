@@ -374,3 +374,26 @@ hub.litter.mass<-summary.hub.litter[c(1,4)]
 
 #and write it
 write.csv(hub.litter.mass, file="cleaned_data/Hubbard_producer_litter_mass.csv", row.names=FALSE)
+
+#all righty- birbs. This table is fairly low complexity, but there are a few things that make 
+#you go hmm. First, it's from a usable format, also, there are 't's all theough it
+#to indicate trace numbers of birds. hmm. let's fix this up
+
+hub.birb<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.81.7&entityid=e1b527e8d41b314cb19209d3cf1aeed1", 
+                     header=T, na.strings=c(""))
+summary(hub.birb)
+
+#whooboy, let's transpose this
+
+hub.birb.trans<-dcast(melt(hub.birb, id="Bird.Species"), variable~Bird.Species)
+
+summary(hub.birb.trans)
+
+#ok, let's clean this up!
+#first column is Year- rename it, clear out all the Xs in the year name from the import
+colnames(hub.birb.trans)[colnames(hub.birb.trans)=="variable"] <- "Year"
+hub.birb.trans$Year<-as.factor(gsub("X", "", hub.birb.trans$Year))
+
+#now let's get rid of all those trace birds
+hub.birb.trans[2:37]<-as.numeric(gsub("t", "0", hub.birb.trans[2:37]))
+
