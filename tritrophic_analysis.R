@@ -395,5 +395,26 @@ colnames(hub.birb.trans)[colnames(hub.birb.trans)=="variable"] <- "Year"
 hub.birb.trans$Year<-as.factor(gsub("X", "", hub.birb.trans$Year))
 
 #now let's get rid of all those trace birds
-hub.birb.trans[2:37]<-as.numeric(gsub("t", "0", hub.birb.trans[2:37]))
 
+hub.birb.trans[, 2:37] <- apply(hub.birb.trans[, 2:37], 2, 
+                                function(x) as.numeric(gsub("t", "0", x)))
+#let's also get the NAs- we'll assume if a bird isn't recorded, it wasn't there
+
+hub.birb.trans[is.na(hub.birb.trans)] <- 0
+summary(hub.birb.trans)
+
+#let's get totals- lat's find the two most common birds, and the total birds
+
+colSums(hub.birb.trans[2:37])
+hub.birb.trans$total<-rowSums(hub.birb.trans[2:37])
+#red eyed vireo and american redstart are our guys
+
+hub.birds.total<-hub.birb.trans[c(1,38)]
+hub.birds.redstart<-hub.birb.trans[c(1,2)]
+hub.birds.vireo<-hub.birb.trans[c(1,23)]
+
+#and write it
+
+write.csv(hub.birds.total, file="cleaned_data/Hubbard_omnivore_bird_total.csv", row.names=FALSE)
+write.csv(hub.birds.redstart, file="cleaned_data/Hubbard_omnivore_bird_redstart.csv", row.names=FALSE)
+write.csv(hub.birds.vireo, file="cleaned_data/Hubbard_omnivore_bird_vireo.csv", row.names=FALSE)
