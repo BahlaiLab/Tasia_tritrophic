@@ -294,7 +294,7 @@ write.csv(mammals.ungrazed.pm, file="cleaned_data/Konza_omnivore_ungrazed_mammal
 #let's do Hubbard Brook next
 
 #ugh, yeah the tree phenology data isn't going to work, but we could do two tropic levels- 
-#leps and birds
+#leps and birds, and maybe use litter deposition for a proxy for productivity?
 
 hub.leps<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.82.7&entityid=c32446bad7211a5a1cfabf70c89baec8", 
                     header=T, na.strings=c("",".","NA"))
@@ -418,3 +418,35 @@ hub.birds.vireo<-hub.birb.trans[c(1,23)]
 write.csv(hub.birds.total, file="cleaned_data/Hubbard_omnivore_bird_total.csv", row.names=FALSE)
 write.csv(hub.birds.redstart, file="cleaned_data/Hubbard_omnivore_bird_redstart.csv", row.names=FALSE)
 write.csv(hub.birds.vireo, file="cleaned_data/Hubbard_omnivore_bird_vireo.csv", row.names=FALSE)
+
+
+##########
+# and now, North Temperate lakes!
+
+# Phytoplankton data is discontinouous but chlorophyll runs 1984-2007 without gaps and has more
+# overlap with zooplankton, and then, I guess we find a fish that likes to eat zooplankton?
+
+#chlorophyll
+
+ntl.chlor<-read.csv(file="https://lter.limnology.wisc.edu/file/11572/download?token=ZQoUgowd1gDw1WvJCddhkiPJ0jkkb4vvWLrODxLygsU", 
+                   header=T, na.strings=c("",".","NA"))
+
+summary(ntl.chlor)
+
+#ok, lakes R and L are the only ones that have continuous measuremnts for chlorophyll A over the 1984-2007 period
+#so let's pull them out for use
+
+ntl.chlor1<-ntl.chlor[which(ntl.chlor$lakeid=="R"|ntl.chlor$lakeid=="L"),]
+#pull out the columns we need
+ntl.chlor2<- ntl.chlor1[c(1,3,4,6,11)]
+
+# from looking at a pivot table, it looks like they didn't consistently sample at a depth greater than 6m
+# after the early 90s, so let's cull out depths >6m because that would bias the sample 
+ntl.chlor3<-ntl.chlor2[which(ntl.chlor2$depth<6.1),]
+
+summary(ntl.chlor3)
+
+#still a bunch of NAs and some negative values for chla- let's cull those out
+ntl.chlor4<-ntl.chlor3[which(ntl.chlor3$chla>=0),]
+
+summary(ntl.chlor4)
