@@ -450,3 +450,5 @@ summary(ntl.chlor3)
 ntl.chlor4<-ntl.chlor3[which(ntl.chlor3$chla>=0),]
 
 summary(ntl.chlor4)
+
+# Ok, let's think about how we want to divy this up
