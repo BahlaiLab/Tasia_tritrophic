@@ -170,6 +170,8 @@ species.list
 #so 58 species. That was a long time to get there, #otherpeoplesdata. Let's use reshape2 to
 #find out what our most abundant species are, by year
 #but first! R is not seeing the total column as numeric.
+library(reshape2)
+
 hoppers1$TOTAL<-as.numeric(hoppers1$TOTAL)
 #and guess what?! site codes switch between capitalization patterns
 hoppers1$WATERSHED <- toupper(hoppers1$WATERSHED)
@@ -451,4 +453,21 @@ ntl.chlor4<-ntl.chlor3[which(ntl.chlor3$chla>=0),]
 
 summary(ntl.chlor4)
 
-# Ok, let's think about how we want to divy this up
+# Ok, let's think about how we want to divy this up- by each lake? and what sort of yearly metric do we want?
+# Average across all depths? Repeated in time across a year?
+summary.ntl.chlor<-ddply(ntl.chlor4, c("lakeid", "year4", "daynum"), summarise,
+                         avg.chla=mean(chla))
+
+#then we want to get ride of the day column, because we're just treating
+#it as reps for this analysis
+
+summary.ntl.chlor$daynum<-NULL
+
+#divide it out by lake ID
+ntl.lakeL.chlor<-summary.ntl.chlor[which(summary.ntl.chlor$lakeid=="L"),]
+ntl.lakeR.chlor<-summary.ntl.chlor[which(summary.ntl.chlor$lakeid=="R"),]
+
+#and write it:
+
+write.csv(ntl.lakeL.chlor, file="cleaned_data/NTL_producer_chlorA_lakeL.csv", row.names=FALSE)
+write.csv(ntl.lakeR.chlor, file="cleaned_data/NTL_producer_chlorA_lakeR.csv", row.names=FALSE)
