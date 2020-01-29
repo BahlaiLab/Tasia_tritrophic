@@ -471,3 +471,7 @@ ntl.lakeR.chlor<-summary.ntl.chlor[which(summary.ntl.chlor$lakeid=="R"),]
 
 write.csv(ntl.lakeL.chlor, file="cleaned_data/NTL_producer_chlorA_lakeL.csv", row.names=FALSE)
 write.csv(ntl.lakeR.chlor, file="cleaned_data/NTL_producer_chlorA_lakeR.csv", row.names=FALSE)
+
+###
+#ok, now zooplankton biomass
+
