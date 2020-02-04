@@ -467,6 +467,10 @@ summary.ntl.chlor$daynum<-NULL
 ntl.lakeL.chlor<-summary.ntl.chlor[which(summary.ntl.chlor$lakeid=="L"),]
 ntl.lakeR.chlor<-summary.ntl.chlor[which(summary.ntl.chlor$lakeid=="R"),]
 
+#remove lakeID from the data frames
+ntl.lakeL.chlor$lakeid<-NULL
+ntl.lakeR.chlor$lakeid<-NULL
+
 #and write it:
 
 write.csv(ntl.lakeL.chlor, file="cleaned_data/NTL_producer_chlorA_lakeL.csv", row.names=FALSE)
@@ -501,10 +505,10 @@ ntl.lakeR.zoo<-summary.ntl.zoo[which(summary.ntl.zoo$lakeid=="R"),]
 
 #and then snip it into abundance and biomass
 
-ntl.lakeL.zoo.abund<-ntl.lakeL.zoo[c(1,2,3)]
-ntl.lakeL.zoo.biomass<-ntl.lakeL.zoo[c(1,2,4)]
-ntl.lakeR.zoo.abund<-ntl.lakeR.zoo[c(1,2,3)]
-ntl.lakeR.zoo.biomass<-ntl.lakeR.zoo[c(1,2,4)]
+ntl.lakeL.zoo.abund<-ntl.lakeL.zoo[c(2,3)]
+ntl.lakeL.zoo.biomass<-ntl.lakeL.zoo[c(2,4)]
+ntl.lakeR.zoo.abund<-ntl.lakeR.zoo[c(2,3)]
+ntl.lakeR.zoo.biomass<-ntl.lakeR.zoo[c(2,4)]
 
 #and write it:
 
@@ -512,3 +516,46 @@ write.csv(ntl.lakeL.zoo.abund, file="cleaned_data/NTL_consumer_zoo_abund_lakeL.c
 write.csv(ntl.lakeR.zoo.abund, file="cleaned_data/NTL_consumer_zoo_abund_lakeR.csv", row.names=FALSE)
 write.csv(ntl.lakeL.zoo.biomass, file="cleaned_data/NTL_consumer_zoo_biomass_lakeL.csv", row.names=FALSE)
 write.csv(ntl.lakeR.zoo.biomass, file="cleaned_data/NTL_consumer_zoo_biomass_lakeR.csv", row.names=FALSE)
+
+
+
+
+#Ok, now it's fish time!
+
+ntl.fish<-read.csv(file="https://lter.limnology.wisc.edu/file/11581/download?token=oMnbKjoio1s_AUYTzqEE85BOds6xNnYnZRermDVc6sg", 
+                  header=T, na.strings=c("",".","NA"))
+
+summary(ntl.fish)
+
+# it's a bit inelegant and reductive, but let's just use biomass and abundance (number_per_net) as our response variables- totals per day per lake
+#for lakes R and L
+
+ntl.fish1<-ntl.fish[which(ntl.fish$lakename=="PETER"|ntl.fish$lakename=="PAUL"),]
+
+#looks like largemouth bass should be the species of focus because they're most common
+
+ntl.fish2<-ntl.fish1[which(ntl.fish1$species=="LARGEMOUTHBASS"),]
+
+#now we count up the number of fish per sampling day, year
+ntl.fish.count<-count(ntl.fish2, c("lakename", "year4", "daynum"))
+
+
+#then we want to get rid of the day column, because we're just treating
+#it as reps for this analysis
+
+ntl.fish.count$daynum<-NULL
+
+#divide it out by lake ID
+ntl.lakeL.fish<-ntl.fish.count[which(ntl.fish.count$lakename=="PAUL"),]
+ntl.lakeR.fish<-ntl.fish.count[which(ntl.fish.count$lakename=="PETER"),]
+
+#remove lakename from the data frames
+ntl.lakeL.fish$lakename<-NULL
+ntl.lakeR.fish$lakename<-NULL
+
+
+#and write it:
+
+write.csv(ntl.lakeL.fish, file="cleaned_data/NTL_predator_fish_lakeL.csv", row.names=FALSE)
+write.csv(ntl.lakeR.fish, file="cleaned_data/NTL_predator_fish_lakeR.csv", row.names=FALSE)
+
