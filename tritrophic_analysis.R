@@ -430,7 +430,7 @@ write.csv(hub.birds.vireo, file="cleaned_data/Hubbard_omnivore_bird_vireo.csv", 
 
 #chlorophyll
 
-ntl.chlor<-read.csv(file="https://lter.limnology.wisc.edu/file/11572/download?token=ZQoUgowd1gDw1WvJCddhkiPJ0jkkb4vvWLrODxLygsU", 
+ntl.chlor<-read.csv(file="https://lter.limnology.wisc.edu/file/11572/download?token=NVbY5LAaAy-ZKJEr9Qg_2JAEAlXkeLAfZXTWX8IKozc", 
                    header=T, na.strings=c("",".","NA"))
 
 summary(ntl.chlor)
@@ -458,7 +458,7 @@ summary(ntl.chlor4)
 summary.ntl.chlor<-ddply(ntl.chlor4, c("lakeid", "year4", "daynum"), summarise,
                          avg.chla=mean(chla))
 
-#then we want to get ride of the day column, because we're just treating
+#then we want to get rid of the day column, because we're just treating
 #it as reps for this analysis
 
 summary.ntl.chlor$daynum<-NULL
@@ -474,4 +474,41 @@ write.csv(ntl.lakeR.chlor, file="cleaned_data/NTL_producer_chlorA_lakeR.csv", ro
 
 ###
 #ok, now zooplankton biomass
+ntl.zoo<-read.csv(file="https://lter.limnology.wisc.edu/file/12827/download?token=4hjezseFWdxgINPiQ6kORapNcYSPtvyZ3EXmmJimbl8", 
+                    header=T, na.strings=c("",".","NA"))
 
+summary(ntl.zoo)
+
+# it's a bit inelegant and reductive, but let's just use biomass and abundance (number_per_net) as our response variables- totals per day per lake
+#for lakes R and L
+
+ntl.zoo1<-ntl.zoo[which(ntl.zoo$lakeid=="R"|ntl.zoo$lakeid=="L"),]
+#pull out the columns we need
+ntl.zoo2<- ntl.zoo1[c(1,3,4,9,16)]
+
+#ok, let's make this repped by day, and take the total abundance and biomass reported within a given day
+summary.ntl.zoo<-ddply(ntl.zoo2, c("lakeid", "year4", "daynum"), summarise,
+                         tot.abund=sum(number_per_net), tot.mass=sum(biomass))
+
+#then we want to get ride of the day column, because we're just treating
+#it as reps for this analysis
+
+summary.ntl.zoo$daynum<-NULL
+
+#divide it out by lake ID
+ntl.lakeL.zoo<-summary.ntl.zoo[which(summary.ntl.zoo$lakeid=="L"),]
+ntl.lakeR.zoo<-summary.ntl.zoo[which(summary.ntl.zoo$lakeid=="R"),]
+
+#and then snip it into abundance and biomass
+
+ntl.lakeL.zoo.abund<-ntl.lakeL.zoo[c(1,2,3)]
+ntl.lakeL.zoo.biomass<-ntl.lakeL.zoo[c(1,2,4)]
+ntl.lakeR.zoo.abund<-ntl.lakeR.zoo[c(1,2,3)]
+ntl.lakeR.zoo.biomass<-ntl.lakeR.zoo[c(1,2,4)]
+
+#and write it:
+
+write.csv(ntl.lakeL.zoo.abund, file="cleaned_data/NTL_consumer_zoo_abund_lakeL.csv", row.names=FALSE)
+write.csv(ntl.lakeR.zoo.abund, file="cleaned_data/NTL_consumer_zoo_abund_lakeR.csv", row.names=FALSE)
+write.csv(ntl.lakeL.zoo.biomass, file="cleaned_data/NTL_consumer_zoo_biomass_lakeL.csv", row.names=FALSE)
+write.csv(ntl.lakeR.zoo.biomass, file="cleaned_data/NTL_consumer_zoo_biomass_lakeR.csv", row.names=FALSE)
