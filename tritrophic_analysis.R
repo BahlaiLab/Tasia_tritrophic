@@ -559,3 +559,70 @@ ntl.lakeR.fish$lakename<-NULL
 write.csv(ntl.lakeL.fish, file="cleaned_data/NTL_predator_fish_lakeL.csv", row.names=FALSE)
 write.csv(ntl.lakeR.fish, file="cleaned_data/NTL_predator_fish_lakeR.csv", row.names=FALSE)
 
+
+#all righty! We are finally here! the last of the four sites! Santa Barbara Coastal. A nice place go in your imagination
+#when it's February and there's an ice storm in Ohio. first dataset actually documents algae and inverts  and fish all at once, so
+#that's handy. Let's bring this data in. Notes said it's a big dataset so warning this might be a bit slow
+
+sbc<-read.csv(file="https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.50.7&entityid=24d18d9ebe4f6e8b94e222840096963c", 
+                   header=T, na.strings=c("",".","NA", -99999,-99999.00))
+
+summary(sbc)
+
+#oh, look at that, the authors of these data were so kind as to provide a coarse grouping of each of the taxa. it's like they knew I was coming
+#to analyse it that way! So awesome. Ok, let's figure out how we want to aggregate this- let's use DRY_GRM2 as our response variable
+
+#ok, I think it makes sense to do this by site, let's use top-two sampled sites, CARP and NAPL
+
+sbc.1<-sbc[which(sbc$SITE=="CARP"|sbc$SITE=="NAPL"),]
+
+#ok, let's scale it down to our functional groups, and heck, let's aggregate it by month/transect
+
+summary.sbc<-ddply(sbc.1, c("YEAR", "MONTH", "SITE", "TRANSECT", "COARSE_GROUPING"), summarise,
+                         biomass=mean(DRY_GM2))
+
+#ok, ditch the NAs
+summary.sbc1<-summary.sbc[complete.cases(summary.sbc),]
+
+#then we want to get rid of the month and transect columns, for our purposes, these are just reps within a year
+
+summary.sbc1$MONTH<-NULL
+summary.sbc1$TRANSECT<-NULL
+
+
+#divide it out by lake ID
+sbc.carp<-summary.sbc1[which(summary.sbc1$SITE=="CARP"),]
+sbc.napl<-summary.sbc1[which(summary.sbc1$SITE=="NAPL"),]
+
+#remove SITE from the data frames
+sbc.carp$SITE<-NULL
+sbc.napl$SITE<-NULL
+
+#now we need to create an object for each of the coarse groupings
+
+sbc.carp.fish<-sbc.carp[which(sbc.carp$COARSE_GROUPING=="FISH"), c(1,3)]
+sbc.carp.kelp<-sbc.carp[which(sbc.carp$COARSE_GROUPING=="GIANT KELP"), c(1,3)]
+sbc.carp.mob.invt<-sbc.carp[which(sbc.carp$COARSE_GROUPING=="MOBILE INVERT"), c(1,3)]
+sbc.carp.ses.invt<-sbc.carp[which(sbc.carp$COARSE_GROUPING=="SESSILE INVERT"), c(1,3)]
+sbc.carp.algae<-sbc.carp[which(sbc.carp$COARSE_GROUPING=="UNDERSTORY ALGAE"), c(1,3)]
+
+sbc.napl.fish<-sbc.napl[which(sbc.napl$COARSE_GROUPING=="FISH"), c(1,3)]
+sbc.napl.kelp<-sbc.napl[which(sbc.napl$COARSE_GROUPING=="GIANT KELP"), c(1,3)]
+sbc.napl.mob.invt<-sbc.napl[which(sbc.napl$COARSE_GROUPING=="MOBILE INVERT"), c(1,3)]
+sbc.napl.ses.invt<-sbc.napl[which(sbc.napl$COARSE_GROUPING=="SESSILE INVERT"), c(1,3)]
+sbc.napl.algae<-sbc.napl[which(sbc.napl$COARSE_GROUPING=="UNDERSTORY ALGAE"), c(1,3)]
+
+
+#and now we write all these
+
+write.csv(sbc.carp.fish, file="cleaned_data/SBC_predator_fish_carp.csv", row.names=FALSE)
+write.csv(sbc.carp.kelp, file="cleaned_data/SBC_producer_kelp_carp.csv", row.names=FALSE)
+write.csv(sbc.carp.mob.invt, file="cleaned_data/SBC_consumer_minvert_carp.csv", row.names=FALSE)
+write.csv(sbc.carp.ses.invt, file="cleaned_data/SBC_consumer_sinvert_carp.csv", row.names=FALSE)
+write.csv(sbc.carp.algae, file="cleaned_data/SBC_producer_algae_carp.csv", row.names=FALSE)
+
+write.csv(sbc.napl.fish, file="cleaned_data/SBC_predator_fish_napl.csv", row.names=FALSE)
+write.csv(sbc.napl.kelp, file="cleaned_data/SBC_producer_kelp_napl.csv", row.names=FALSE)
+write.csv(sbc.napl.mob.invt, file="cleaned_data/SBC_consumer_minvert_napl.csv", row.names=FALSE)
+write.csv(sbc.napl.ses.invt, file="cleaned_data/SBC_consumer_sinvert_napl.csv", row.names=FALSE)
+write.csv(sbc.napl.algae, file="cleaned_data/SBC_producer_algae_napl.csv", row.names=FALSE)
