@@ -626,5 +626,3 @@ write.csv(sbc.napl.kelp, file="cleaned_data/SBC_producer_kelp_napl.csv", row.nam
 write.csv(sbc.napl.mob.invt, file="cleaned_data/SBC_consumer_minvert_napl.csv", row.names=FALSE)
 write.csv(sbc.napl.ses.invt, file="cleaned_data/SBC_consumer_sinvert_napl.csv", row.names=FALSE)
 write.csv(sbc.napl.algae, file="cleaned_data/SBC_producer_algae_napl.csv", row.names=FALSE)
-
-#Hi Sha
