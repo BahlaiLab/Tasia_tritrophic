@@ -14,19 +14,26 @@ source("https://raw.githubusercontent.com/BahlaiLab/bad_breakup_2/master/R_model
 
 #let's clean all these data up!
 #general procedure- import, check, fix obvious errors
-# then get summaries of our metrics of interest, with subsets on treatments which would
+#then get summaries of our metrics of interest, with subsets on treatments which would
 #affect the dependant variables.
 
 library(plyr)
 # Konza prairie- let's import the data
 
 #import data, assuming both blanks and periods are null values
-grassmass<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-knz.72.9&entityid=d7d500227665f76533332ebade88deeb", 
+#LTER Package ID: knb-lter-knz.72
+
+#grassmass<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-knz.72.9&entityid=d7d500227665f76533332ebade88deeb", 
+                    #header=T, na.strings=c("",".","NA")) 
+
+grassmass<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-knz/72/18/d7d500227665f76533332ebade88deeb", 
                     header=T, na.strings=c("",".","NA"))
 
 
 #do some checks to see if R read the data correctly
+str(grassmass)
 summary(grassmass)
+levels(as.factor((grassmass$TRANSECT)))
 #we need to correct the transect values, in certain years, 'ni' was used as a treatment name instead of 'c' for control
 grassmass$TRANSECT<-as.factor(gsub("ni", "c", grassmass$TRANSECT))
 
@@ -80,7 +87,12 @@ write.csv(grassmass.irrigated.forbs, file="cleaned_data/Konza_producer_irrigated
 #ok, let's grasshopper this! the data has a BUNCH of issues we're going to have to address, 
 #but let's talk about that later and bring it in first
 
-hoppers<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-knz.29.12&entityid=3fb352e2478f776517f7e880fe31b808", 
+#LTER Package ID: knb-lter-knz.29
+
+#hoppers<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-knz.29.12&entityid=3fb352e2478f776517f7e880fe31b808", 
+                    #header=T, na.strings=c("",".","NA"))
+
+hoppers<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-knz/29/19/3fb352e2478f776517f7e880fe31b808", 
                     header=T, na.strings=c("",".","NA"))
 
 summary(hoppers)
@@ -116,7 +128,7 @@ hoppers1$SOILTYPE<-NULL
 hoppers1$DATACODE<-NULL
 hoppers1$COMMENTS<-NULL
 
-#so it's apparent now that there's plenty of typoes in species names (MY NEMESIS)
+#so it's apparent now that there's plenty of typos in species names (MY NEMESIS)
 # let's start by making sure they're consistently capitalized
 library(Hmisc)
 hoppers1$SPECIES<-capitalize(as.character(hoppers1$SPECIES))
@@ -243,10 +255,17 @@ write.csv(hoppers.ungrazed.total, file="cleaned_data/Konza_herbivore_ungrazed_gr
 write.csv(hoppers.ungrazed.p.n, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_pn.csv", row.names=FALSE)
 write.csv(hoppers.ungrazed.o.s, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_os.csv", row.names=FALSE)
 
-#ok,time for the small mammals. This data is in a different format from the grasshoppes but at least
+#ok,time for the small mammals. These data are in a different format from the grasshoppers but at least
 #it seems to mostly be taken in the same spaces.
-mammals<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-knz.88.7&entityid=1ced8529601926470f68c1d5eb708350", 
+
+#LTER Package ID: knb-lter-knz.88
+
+#mammals<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-knz.88.7&entityid=1ced8529601926470f68c1d5eb708350", 
+                  #header=T, na.strings=c("",".","NA"))
+
+mammals<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-knz/88/8/1ced8529601926470f68c1d5eb708350", 
                   header=T, na.strings=c("",".","NA"))
+
 #get totals so we can get rid of the extra columns
 
 mammals$TOTAL<- rowSums(mammals[7:20])
@@ -288,7 +307,7 @@ write.csv(mammals.ungrazed.total, file="cleaned_data/Konza_omnivore_ungrazed_mam
 write.csv(mammals.ungrazed.pl, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pl.csv", row.names=FALSE)
 write.csv(mammals.ungrazed.pm, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pm.csv", row.names=FALSE)
 
-# okay now the data is clean and in the format we need.  -_- At least for Konza.
+# okay now the data are clean and in the format we need.  -_- At least for Konza.
 
 # That was somethin'. but- onward! we need to clean three more sites, haha :'S
 
@@ -298,8 +317,14 @@ write.csv(mammals.ungrazed.pm, file="cleaned_data/Konza_omnivore_ungrazed_mammal
 #ugh, yeah the tree phenology data isn't going to work, but we could do two tropic levels- 
 #leps and birds, and maybe use litter deposition for a proxy for productivity?
 
-hub.leps<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.82.7&entityid=c32446bad7211a5a1cfabf70c89baec8", 
-                    header=T, na.strings=c("",".","NA"))
+#LTER Package ID: knb-lter-hbr.82
+
+#hub.leps<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.82.7&entityid=c32446bad7211a5a1cfabf70c89baec8", 
+                    #header=T, na.strings=c("",".","NA"))
+
+hub.leps<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-hbr/82/8/c32446bad7211a5a1cfabf70c89baec8", 
+                   header=T, na.strings=c("",".","NA"))
+
 summary(hub.leps)
 #I think what's most relevant here is the number of individuals from all taxa and the biomass.
 #there is also four species of tree these data were collected from, so maybe divide up on that.
@@ -344,16 +369,22 @@ write.csv(hub.leps.maple.individuals, file="cleaned_data/Hubbard_herbivore_maple
 write.csv(hub.leps.beech.biomass, file="cleaned_data/Hubbard_herbivore_beech_biomass.csv", row.names=FALSE)
 write.csv(hub.leps.beech.individuals, file="cleaned_data/Hubbard_herbivore_beech_abundance.csv", row.names=FALSE)
 
-#ok, as a proxy for plant productivity, which is scattered accross numerous datasets,
+#ok, as a proxy for plant productivity, which is scattered across numerous datasets,
 #hbr makes litterfall available, so let's take a look-see at the coverage of these data
 
-hub.litter<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.49.6&entityid=4f2ea33823ced1a36fb8f18c757aec6e", 
-                   header=T, na.strings=c("",".","NA", "-9999", "-9999.99", "-9999.9", "-99.00"))
+#LTER Package ID: knb-lter-hbr.49
+
+#hub.litter<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.49.6&entityid=4f2ea33823ced1a36fb8f18c757aec6e", 
+                   #header=T, na.strings=c("",".","NA", "-9999", "-9999.99", "-9999.9", "-99.00"))
+
+hub.litter<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-hbr/49/7/e4bf3920eaafe685aa8755828da48770", 
+                     header=T, na.strings=c("",".","NA", "-9999", "-9999.99", "-9999.9", "-99.00"))
+
 summary(hub.litter)
 
 #so I was hoping to break it out by species dry mass, but the data coverage is not super, so total dry
 #mass may be the thing. Since the lep data is only taken in beech and maple, let's just use hardwood
-#forest sites, and sites withour Ca addition
+#forest sites, and sites without Ca addition
 
 hub.litter1<-hub.litter[which(hub.litter$TRTMT=="noCA"&hub.litter$COMP=="HW"),]
 #pull out the columns we need
@@ -377,12 +408,18 @@ hub.litter.mass<-summary.hub.litter[c(1,4)]
 #and write it
 write.csv(hub.litter.mass, file="cleaned_data/Hubbard_producer_litter_mass.csv", row.names=FALSE)
 
-#all righty- birbs. This table is fairly low complexity, but there are a few things that make 
-#you go hmm. First, it's from a usable format, also, there are 't's all theough it
+#all righty- birds. This table is fairly low complexity, but there are a few things that make 
+#you go hmm. First, it's from a usable format, also, there are 't's all through it
 #to indicate trace numbers of birds. hmm. let's fix this up
 
-hub.birb<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.81.7&entityid=e1b527e8d41b314cb19209d3cf1aeed1", 
-                     header=T, na.strings=c(""))
+#LTER Package ID: knb-lter-hbr.81
+
+#hub.birb<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.81.7&entityid=e1b527e8d41b314cb19209d3cf1aeed1", 
+                     #header=T, na.strings=c(""))
+
+hub.birb<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-hbr/81/7/e1b527e8d41b314cb19209d3cf1aeed1", 
+                   header=T, na.strings=c(""))
+
 summary(hub.birb)
 
 #whooboy, let's transpose this
@@ -430,12 +467,17 @@ write.csv(hub.birds.vireo, file="cleaned_data/Hubbard_omnivore_bird_vireo.csv", 
 
 #chlorophyll
 
-ntl.chlor<-read.csv(file="https://lter.limnology.wisc.edu/file/11572/download?token=NVbY5LAaAy-ZKJEr9Qg_2JAEAlXkeLAfZXTWX8IKozc", 
-                   header=T, na.strings=c("",".","NA"))
+#LTER Package ID: knb-lter-ntl.73
+
+#ntl.chlor<-read.csv(file="https://lter.limnology.wisc.edu/file/11572/download?token=NVbY5LAaAy-ZKJEr9Qg_2JAEAlXkeLAfZXTWX8IKozc", 
+                   #header=T, na.strings=c("",".","NA"))
+
+ntl.chlor<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-ntl/73/6/af2632acc5f66cfdafc0a470dae4f095", 
+                    header=T, na.strings=c("",".","NA"))
 
 summary(ntl.chlor)
 
-#ok, lakes R and L are the only ones that have continuous measuremnts for chlorophyll A over the 1984-2007 period
+#ok, lakes R and L are the only ones that have continuous measurements for chlorophyll A over the 1984-2007 period
 #so let's pull them out for use
 
 ntl.chlor1<-ntl.chlor[which(ntl.chlor$lakeid=="R"|ntl.chlor$lakeid=="L"),]
@@ -478,8 +520,14 @@ write.csv(ntl.lakeR.chlor, file="cleaned_data/NTL_producer_chlorA_lakeR.csv", ro
 
 ###
 #ok, now zooplankton biomass
-ntl.zoo<-read.csv(file="https://lter.limnology.wisc.edu/file/12827/download?token=4hjezseFWdxgINPiQ6kORapNcYSPtvyZ3EXmmJimbl8", 
-                    header=T, na.strings=c("",".","NA"))
+
+# LTER Package ID: knb-lter-ntl.79
+
+#ntl.zoo<-read.csv(file="https://lter.limnology.wisc.edu/file/12827/download?token=4hjezseFWdxgINPiQ6kORapNcYSPtvyZ3EXmmJimbl8", 
+                    #header=T, na.strings=c("",".","NA"))
+
+ntl.zoo<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-ntl/79/5/9417caead3e315b737f76d1507e29210", 
+                  header=T, na.strings=c("",".","NA"))
 
 summary(ntl.zoo)
 
@@ -522,8 +570,13 @@ write.csv(ntl.lakeR.zoo.biomass, file="cleaned_data/NTL_consumer_zoo_biomass_lak
 
 #Ok, now it's fish time!
 
-ntl.fish<-read.csv(file="https://lter.limnology.wisc.edu/file/11581/download?token=oMnbKjoio1s_AUYTzqEE85BOds6xNnYnZRermDVc6sg", 
-                  header=T, na.strings=c("",".","NA"))
+#LTER Package ID: knb-lter-ntl.86
+
+#ntl.fish<-read.csv(file="https://lter.limnology.wisc.edu/file/11581/download?token=oMnbKjoio1s_AUYTzqEE85BOds6xNnYnZRermDVc6sg", 
+                  #header=T, na.strings=c("",".","NA"))
+
+ntl.fish<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-ntl/86/5/9dc475cd80f45f64fb79a7d6733ee20f", 
+                   header=T, na.strings=c("",".","NA"))
 
 summary(ntl.fish)
 
@@ -564,8 +617,13 @@ write.csv(ntl.lakeR.fish, file="cleaned_data/NTL_predator_fish_lakeR.csv", row.n
 #when it's February and there's an ice storm in Ohio. first dataset actually documents algae and inverts  and fish all at once, so
 #that's handy. Let's bring this data in. Notes said it's a big dataset so warning this might be a bit slow
 
-sbc<-read.csv(file="https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.50.7&entityid=24d18d9ebe4f6e8b94e222840096963c", 
-                   header=T, na.strings=c("",".","NA", -99999,-99999.00))
+#LTER Package ID: knb-lter-sbc.50
+
+#sbc<-read.csv(file="https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.50.7&entityid=24d18d9ebe4f6e8b94e222840096963c", 
+                   #header=T, na.strings=c("",".","NA", -99999,-99999.00))
+
+sbc<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-sbc/50/10/24d18d9ebe4f6e8b94e222840096963c", 
+              header=T, na.strings=c("",".","NA", -99999,-99999.00))
 
 summary(sbc)
 
