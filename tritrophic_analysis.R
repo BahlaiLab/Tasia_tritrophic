@@ -77,9 +77,6 @@ write.csv(grassmass.irrigated.forbs, file="cleaned_data/Konza_producer_irrigated
 
 #LTER Package ID: knb-lter-knz.29
 
-#hoppers<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-knz.29.12&entityid=3fb352e2478f776517f7e880fe31b808", 
-                    #header=T, na.strings=c("",".","NA"))
-
 hoppers<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-knz/29/19/3fb352e2478f776517f7e880fe31b808", 
                     header=T, na.strings=c("",".","NA"))
 
@@ -182,7 +179,7 @@ hoppers1$SPECIES<-gsub("Xanthippus corallipess", "Xanthippus corallipes", hopper
 species.list <- sort(unique(hoppers1$SPECIES))
 species.list
 
-##74 species
+##double check there are only 74 species
 #so 58 species. That was a long time to get there, #otherpeoplesdata. Let's use reshape2 to
 #find out what our most abundant species are, by year
 #but first! R is not seeing the total column as numeric.
@@ -210,6 +207,7 @@ summary(hoppers1)
 
 #there is one species (Pardalophora haldemani, 2005) with an NA in the total column - an implied zero
 #let's make it an explicit zero
+#otherwise total for year 2005 is NA in the summary below
 hoppers1[is.na(hoppers1)] <- 0
 summary(hoppers1)
 
@@ -276,7 +274,7 @@ write.csv(hoppers.ungrazed.total, file="cleaned_data/Konza_herbivore_ungrazed_gr
 write.csv(hoppers.ungrazed.p.n, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_pn.csv", row.names=FALSE)
 write.csv(hoppers.ungrazed.o.s, file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_os.csv", row.names=FALSE)
 
-#ok,time for the small mammals. These data are in a different format from the grasshoppers but at least
+#ok, time for the small mammals. These data are in a different format from the grasshoppers but at least
 #it seems to mostly be taken in the same spaces.
 
 #LTER Package ID: knb-lter-knz.88
@@ -287,36 +285,40 @@ write.csv(hoppers.ungrazed.o.s, file="cleaned_data/Konza_herbivore_ungrazed_gras
 mammals<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-knz/88/8/1ced8529601926470f68c1d5eb708350", 
                   header=T, na.strings=c("",".","NA"))
 
+str(mammals)
+
 #get totals so we can get rid of the extra columns
 
-mammals$TOTAL<- rowSums(mammals[7:20])
+mammals$TOTAL <- rowSums(mammals[7:20])
 
 #cull out the columns we don't need: Pm and Pl are our two most abundant species
-mammals1<-mammals[c(4,5,6,7,14,21)]
+summary(mammals)
+mammals1 <- mammals[c(4,5,6,7,14,21)]
 
 #we want to sum things over the two samplings each year
 
-summary.mammals<-ddply(mammals1, c("RECYEAR", "WATERSHED.LINE"), summarise,
+summary.mammals <- ddply(mammals1, c("RECYEAR", "WATERSHED.LINE"), summarise,
                                TOTAL=sum(TOTAL), Pl=sum(Pl),Pm=sum(Pm))
 
 #cull out treatments with 2 and 4 year fire frequencies
-summary.mammals1<-summary.mammals[which(!grepl("2", summary.mammals$WATERSHED.LINE)),]
-summary.mammals2<-summary.mammals1[which(!grepl("4", summary.mammals1$WATERSHED.LINE)),]
+levels(as.factor((summary.mammals$WATERSHED.LINE)))
+summary.mammals1 <- summary.mammals[which(!grepl("2", summary.mammals$WATERSHED.LINE)),]
+summary.mammals2 <- summary.mammals1[which(!grepl("4", summary.mammals1$WATERSHED.LINE)),]
 
 
-mammals.grazed<-summary.mammals2[which(grepl("N", summary.mammals2$WATERSHED.LINE)),]
-mammals.ungrazed<-summary.mammals2[which(!grepl("N", summary.mammals2$WATERSHED.LINE)),]
+mammals.grazed <- summary.mammals2[which(grepl("N", summary.mammals2$WATERSHED.LINE)),]
+mammals.ungrazed <- summary.mammals2[which(!grepl("N", summary.mammals2$WATERSHED.LINE)),]
 
-mammals.grazed$WATERSHED.LINE<-NULL
-mammals.ungrazed$WATERSHED.LINE<-NULL
+mammals.grazed$WATERSHED.LINE <- NULL
+mammals.ungrazed$WATERSHED.LINE <- NULL
 
-mammals.grazed.total<-mammals.grazed[1:2]
-mammals.grazed.pl<-mammals.grazed[c(1,3)]
-mammals.grazed.pm<-mammals.grazed[c(1,4)]
+mammals.grazed.total <- mammals.grazed[1:2]
+mammals.grazed.pl <- mammals.grazed[c(1,3)]
+mammals.grazed.pm <- mammals.grazed[c(1,4)]
 
-mammals.ungrazed.total<-mammals.ungrazed[1:2]
-mammals.ungrazed.pl<-mammals.ungrazed[c(1,3)]
-mammals.ungrazed.pm<-mammals.ungrazed[c(1,4)]
+mammals.ungrazed.total <- mammals.ungrazed[1:2]
+mammals.ungrazed.pl <- mammals.ungrazed[c(1,3)]
+mammals.ungrazed.pm <- mammals.ungrazed[c(1,4)]
 
 
 #all right,here we go, write the data
@@ -328,20 +330,17 @@ write.csv(mammals.ungrazed.total, file="cleaned_data/Konza_omnivore_ungrazed_mam
 write.csv(mammals.ungrazed.pl, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pl.csv", row.names=FALSE)
 write.csv(mammals.ungrazed.pm, file="cleaned_data/Konza_omnivore_ungrazed_mammal_pm.csv", row.names=FALSE)
 
-# okay now the data are clean and in the format we need.  -_- At least for Konza.
+#okay now the data are clean and in the format we need.  -_- At least for Konza.
 
-# That was somethin'. but- onward! we need to clean three more sites, haha :'S
+#That was somethin'. but- onward! we need to clean three more sites, haha :'S
 
 #######################################
 #let's do Hubbard Brook next
 
 #ugh, yeah the tree phenology data isn't going to work, but we could do two tropic levels- 
-#leps and birds, and maybe use litter deposition for a proxy for productivity?
+#leps and birds, and maybe use litter deposition as a proxy for productivity?
 
 #LTER Package ID: knb-lter-hbr.82
-
-#hub.leps<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.82.7&entityid=c32446bad7211a5a1cfabf70c89baec8", 
-                    #header=T, na.strings=c("",".","NA"))
 
 hub.leps<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-hbr/82/8/c32446bad7211a5a1cfabf70c89baec8", 
                    header=T, na.strings=c("",".","NA"))
@@ -351,37 +350,39 @@ summary(hub.leps)
 #there is also four species of tree these data were collected from, so maybe divide up on that.
 #looks like there's probably unequal sampling between years so will have to account for that
 
-summary.hub.leps<-ddply(hub.leps, c("Year", "GridLetter", "GridNumber", "TreeSpecies"), summarise,
+summary.hub.leps <- ddply(hub.leps, c("Year", "GridLetter", "GridNumber", "TreeSpecies"), summarise,
                        individuals=mean(NumberIndividuals), biomass=mean(biomass))
 
 #looks like there's some missing data for sampling location, so let's ditch that
 
-summary.hub.leps<-summary.hub.leps[complete.cases(summary.hub.leps),]
+summary.hub.leps <- summary.hub.leps[complete.cases(summary.hub.leps),]
+
+summary(summary.hub.leps)
 
 #strip out unnecessary columns
-summary.hub.leps$GridLetter<-NULL
-summary.hub.leps$GridNumber<-NULL
+summary.hub.leps$GridLetter <- NULL
+summary.hub.leps$GridNumber <- NULL
 
 #Divide it up by tree species
-hub.leps.viburnum<-summary.hub.leps[which(summary.hub.leps$TreeSpecies=="4"),]
-hub.leps.st.maple<-summary.hub.leps[which(summary.hub.leps$TreeSpecies=="3"),]
-hub.leps.su.maple<-summary.hub.leps[which(summary.hub.leps$TreeSpecies=="2"),]
-hub.leps.beech<-summary.hub.leps[which(summary.hub.leps$TreeSpecies=="1"),]
+hub.leps.viburnum <- summary.hub.leps[which(summary.hub.leps$TreeSpecies=="4"),]
+hub.leps.st.maple <- summary.hub.leps[which(summary.hub.leps$TreeSpecies=="3"),]
+hub.leps.su.maple <- summary.hub.leps[which(summary.hub.leps$TreeSpecies=="2"),]
+hub.leps.beech <- summary.hub.leps[which(summary.hub.leps$TreeSpecies=="1"),]
 
 #strip out the tree species column
-hub.leps.viburnum$TreeSpecies<-NULL
-hub.leps.st.maple$TreeSpecies<-NULL
-hub.leps.su.maple$TreeSpecies<-NULL
-hub.leps.beech$TreeSpecies<-NULL
+hub.leps.viburnum$TreeSpecies <- NULL
+hub.leps.st.maple$TreeSpecies <- NULL
+hub.leps.su.maple$TreeSpecies <- NULL
+hub.leps.beech$TreeSpecies <- NULL
 
 #oh my god, there's no data reported for viburnum or striped maple? Ok, let's leave (ha)
 #those out :/
 #divide data into biomass and abundance
 
-hub.leps.maple.biomass<-hub.leps.su.maple[c(1,3)]
-hub.leps.maple.individuals<-hub.leps.su.maple[c(1,2)]
-hub.leps.beech.biomass<-hub.leps.beech[c(1,3)]
-hub.leps.beech.individuals<-hub.leps.beech[c(1,2)]
+hub.leps.maple.biomass <- hub.leps.su.maple[c(1,3)]
+hub.leps.maple.individuals <- hub.leps.su.maple[c(1,2)]
+hub.leps.beech.biomass <- hub.leps.beech[c(1,3)]
+hub.leps.beech.individuals <- hub.leps.beech[c(1,2)]
 
 #and write it
 
@@ -395,36 +396,40 @@ write.csv(hub.leps.beech.individuals, file="cleaned_data/Hubbard_herbivore_beech
 
 #LTER Package ID: knb-lter-hbr.49
 
-#hub.litter<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.49.6&entityid=4f2ea33823ced1a36fb8f18c757aec6e", 
-                   #header=T, na.strings=c("",".","NA", "-9999", "-9999.99", "-9999.9", "-99.00"))
-
 hub.litter<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-hbr/49/7/e4bf3920eaafe685aa8755828da48770", 
                      header=T, na.strings=c("",".","NA", "-9999", "-9999.99", "-9999.9", "-99.00"))
 
 summary(hub.litter)
 
 #so I was hoping to break it out by species dry mass, but the data coverage is not super, so total dry
-#mass may be the thing. Since the lep data is only taken in beech and maple, let's just use hardwood
+#mass may be the thing. Since the lep data are only taken in beech and maple, let's just use hardwood
 #forest sites, and sites without Ca addition
 
-hub.litter1<-hub.litter[which(hub.litter$TRTMT=="noCA"&hub.litter$COMP=="HW"),]
+levels(as.factor(hub.litter$TRTMT))
+levels(as.factor(hub.litter$COMP))
+
+hub.litter1 <- hub.litter[which(hub.litter$TRTMT=="noCA"&hub.litter$COMP=="HW"),]
 #pull out the columns we need
 hub.litter2<- hub.litter1[c(3,4,5,6,9)]
 
 #looks like there's some missing data for sampling location, so let's ditch that
+summary(hub.litter2)
 
-hub.litter2<-hub.litter2[complete.cases(hub.litter2),]
+hub.litter2 <- hub.litter2[complete.cases(hub.litter2),]
 
 #ok, differing number of samples each year. Sheesh. ok, let's see if the number of samples matters
 
-summary.hub.litter<-ddply(hub.litter2, c("YEAR", "SITE", "ELEV"), summarise,
-                        Avlitter=mean(DRY_MASS), totlitter=sum(DRY_MASS), samples=length(DRY_MASS))
+summary.hub.litter <- ddply(hub.litter2, c("YEAR", "SITE", "ELEV"), summarise,
+                            Avlitter=mean(DRY_MASS), totlitter=sum(DRY_MASS), samples=length(DRY_MASS))
 
-#looks like number of samples is strongly positively correlated with total samples but average leaf litter
+plot(summary.hub.litter$totlitter ~ summary.hub.litter$samples)
+plot(summary.hub.litter$Avlitter ~ summary.hub.litter$samples)
+
+#looks like number of samples is strongly positively correlated with total litter but average leaf litter
 #is not, so let's use the average, and there's no apparent site or elevation effects so they can be our 
 #subsamples, and we'll just have one response measured for this level
 
-hub.litter.mass<-summary.hub.litter[c(1,4)]
+hub.litter.mass <- summary.hub.litter[c(1,4)]
 
 #and write it
 write.csv(hub.litter.mass, file="cleaned_data/Hubbard_producer_litter_mass.csv", row.names=FALSE)
@@ -435,43 +440,41 @@ write.csv(hub.litter.mass, file="cleaned_data/Hubbard_producer_litter_mass.csv",
 
 #LTER Package ID: knb-lter-hbr.81
 
-#hub.birb<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-hbr.81.7&entityid=e1b527e8d41b314cb19209d3cf1aeed1", 
-                     #header=T, na.strings=c(""))
-
-hub.birb<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-hbr/81/7/e1b527e8d41b314cb19209d3cf1aeed1", 
+hub.bird<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-hbr/81/7/e1b527e8d41b314cb19209d3cf1aeed1", 
                    header=T, na.strings=c(""))
 
-summary(hub.birb)
+summary(hub.bird)
 
 #whooboy, let's transpose this
 
-hub.birb.trans<-dcast(melt(hub.birb, id="Bird.Species"), variable~Bird.Species)
+hub.bird.trans <- dcast(melt(hub.bird, id="Bird.Species"), variable ~ Bird.Species)
 
-summary(hub.birb.trans)
+summary(hub.bird.trans)
 
 #ok, let's clean this up!
 #first column is Year- rename it, clear out all the Xs in the year name from the import
-colnames(hub.birb.trans)[colnames(hub.birb.trans)=="variable"] <- "Year"
-hub.birb.trans$Year<-as.factor(gsub("X", "", hub.birb.trans$Year))
+colnames(hub.bird.trans)[colnames(hub.bird.trans)=="variable"] <- "Year"
+hub.bird.trans$Year <- as.factor(gsub("X", "", hub.bird.trans$Year))
 
 #now let's get rid of all those trace birds
 
-hub.birb.trans[, 2:37] <- apply(hub.birb.trans[, 2:37], 2, 
+hub.bird.trans[, 2:37] <- apply(hub.bird.trans[, 2:37], 2, 
                                 function(x) as.numeric(gsub("t", "0", x)))
+
 #let's also get the NAs- we'll assume if a bird isn't recorded, it wasn't there
 
-hub.birb.trans[is.na(hub.birb.trans)] <- 0
-summary(hub.birb.trans)
+hub.bird.trans[is.na(hub.bird.trans)] <- 0
+summary(hub.bird.trans)
 
-#let's get totals- lat's find the two most common birds, and the total birds
+#let's get totals- let's find the two most common birds, and the total birds
 
-colSums(hub.birb.trans[2:37])
-hub.birb.trans$total<-rowSums(hub.birb.trans[2:37])
-#red eyed vireo and american redstart are our guys
+colSums(hub.bird.trans[2:37])
+hub.bird.trans$total <- rowSums(hub.bird.trans[2:37])
+#red eyed vireo and american redstart are our guys (or gals)
 
-hub.birds.total<-hub.birb.trans[c(1,38)]
-hub.birds.redstart<-hub.birb.trans[c(1,2)]
-hub.birds.vireo<-hub.birb.trans[c(1,23)]
+hub.birds.total <- hub.bird.trans[c(1,38)]
+hub.birds.redstart <- hub.bird.trans[c(1,2)]
+hub.birds.vireo <- hub.bird.trans[c(1,23)]
 
 #and write it
 
@@ -490,49 +493,51 @@ write.csv(hub.birds.vireo, file="cleaned_data/Hubbard_omnivore_bird_vireo.csv", 
 
 #LTER Package ID: knb-lter-ntl.73
 
-#ntl.chlor<-read.csv(file="https://lter.limnology.wisc.edu/file/11572/download?token=NVbY5LAaAy-ZKJEr9Qg_2JAEAlXkeLAfZXTWX8IKozc", 
-                   #header=T, na.strings=c("",".","NA"))
-
 ntl.chlor<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-ntl/73/6/af2632acc5f66cfdafc0a470dae4f095", 
                     header=T, na.strings=c("",".","NA"))
 
 summary(ntl.chlor)
+str(ntl.chlor)
 
 #ok, lakes R and L are the only ones that have continuous measurements for chlorophyll A over the 1984-2007 period
 #so let's pull them out for use
 
-ntl.chlor1<-ntl.chlor[which(ntl.chlor$lakeid=="R"|ntl.chlor$lakeid=="L"),]
+levels(as.factor(ntl.chlor$lakeid))
+
+ntl.chlor1 <- ntl.chlor[which(ntl.chlor$lakeid=="R"|ntl.chlor$lakeid=="L"),]
+
 #pull out the columns we need
-ntl.chlor2<- ntl.chlor1[c(1,3,4,6,11)]
+ntl.chlor2 <- ntl.chlor1[c(1,3,4,6,11)]
+summary(ntl.chlor2)
 
 # from looking at a pivot table, it looks like they didn't consistently sample at a depth greater than 6m
 # after the early 90s, so let's cull out depths >6m because that would bias the sample 
-ntl.chlor3<-ntl.chlor2[which(ntl.chlor2$depth<6.1),]
+ntl.chlor3 <- ntl.chlor2[which(ntl.chlor2$depth<6.1),]
 
 summary(ntl.chlor3)
 
 #still a bunch of NAs and some negative values for chla- let's cull those out
-ntl.chlor4<-ntl.chlor3[which(ntl.chlor3$chla>=0),]
+ntl.chlor4 <- ntl.chlor3[which(ntl.chlor3$chla>=0),]
 
 summary(ntl.chlor4)
 
 # Ok, let's think about how we want to divy this up- by each lake? and what sort of yearly metric do we want?
 # Average across all depths? Repeated in time across a year?
-summary.ntl.chlor<-ddply(ntl.chlor4, c("lakeid", "year4", "daynum"), summarise,
+summary.ntl.chlor <- ddply(ntl.chlor4, c("lakeid", "year4", "daynum"), summarise,
                          avg.chla=mean(chla))
 
 #then we want to get rid of the day column, because we're just treating
 #it as reps for this analysis
 
-summary.ntl.chlor$daynum<-NULL
+summary.ntl.chlor$daynum <- NULL
 
 #divide it out by lake ID
-ntl.lakeL.chlor<-summary.ntl.chlor[which(summary.ntl.chlor$lakeid=="L"),]
-ntl.lakeR.chlor<-summary.ntl.chlor[which(summary.ntl.chlor$lakeid=="R"),]
+ntl.lakeL.chlor <- summary.ntl.chlor[which(summary.ntl.chlor$lakeid=="L"),]
+ntl.lakeR.chlor <- summary.ntl.chlor[which(summary.ntl.chlor$lakeid=="R"),]
 
 #remove lakeID from the data frames
-ntl.lakeL.chlor$lakeid<-NULL
-ntl.lakeR.chlor$lakeid<-NULL
+ntl.lakeL.chlor$lakeid <- NULL
+ntl.lakeR.chlor$lakeid <- NULL
 
 #and write it:
 
@@ -542,42 +547,40 @@ write.csv(ntl.lakeR.chlor, file="cleaned_data/NTL_producer_chlorA_lakeR.csv", ro
 ###
 #ok, now zooplankton biomass
 
-# LTER Package ID: knb-lter-ntl.79
+# LTER Package ID: knb-lter-ntl.355
 
-#ntl.zoo<-read.csv(file="https://lter.limnology.wisc.edu/file/12827/download?token=4hjezseFWdxgINPiQ6kORapNcYSPtvyZ3EXmmJimbl8", 
-                    #header=T, na.strings=c("",".","NA"))
-
-ntl.zoo<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-ntl/79/5/9417caead3e315b737f76d1507e29210", 
+ntl.zoo <- read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-ntl/355/4/8084d8a30424cbf3feb4f69621e6c0a1", 
                   header=T, na.strings=c("",".","NA"))
 
 summary(ntl.zoo)
+levels(as.factor(ntl.zoo$year4))
 
 # it's a bit inelegant and reductive, but let's just use biomass and abundance (number_per_net) as our response variables- totals per day per lake
 #for lakes R and L
 
-ntl.zoo1<-ntl.zoo[which(ntl.zoo$lakeid=="R"|ntl.zoo$lakeid=="L"),]
+ntl.zoo1 <- ntl.zoo[which(ntl.zoo$lakeid=="R"|ntl.zoo$lakeid=="L"),]
 #pull out the columns we need
-ntl.zoo2<- ntl.zoo1[c(1,3,4,9,16)]
+ntl.zoo2 <- ntl.zoo1[c(1,3,4,9,16)]
 
 #ok, let's make this repped by day, and take the total abundance and biomass reported within a given day
-summary.ntl.zoo<-ddply(ntl.zoo2, c("lakeid", "year4", "daynum"), summarise,
+summary.ntl.zoo <- ddply(ntl.zoo2, c("lakeid", "year4", "daynum"), summarise,
                          tot.abund=sum(number_per_net), tot.mass=sum(biomass))
 
-#then we want to get ride of the day column, because we're just treating
+#then we want to get rid of the day column, because we're just treating
 #it as reps for this analysis
 
-summary.ntl.zoo$daynum<-NULL
+summary.ntl.zoo$daynum <- NULL
 
 #divide it out by lake ID
-ntl.lakeL.zoo<-summary.ntl.zoo[which(summary.ntl.zoo$lakeid=="L"),]
-ntl.lakeR.zoo<-summary.ntl.zoo[which(summary.ntl.zoo$lakeid=="R"),]
+ntl.lakeL.zoo <- summary.ntl.zoo[which(summary.ntl.zoo$lakeid=="L"),]
+ntl.lakeR.zoo <- summary.ntl.zoo[which(summary.ntl.zoo$lakeid=="R"),]
 
 #and then snip it into abundance and biomass
 
-ntl.lakeL.zoo.abund<-ntl.lakeL.zoo[c(2,3)]
-ntl.lakeL.zoo.biomass<-ntl.lakeL.zoo[c(2,4)]
-ntl.lakeR.zoo.abund<-ntl.lakeR.zoo[c(2,3)]
-ntl.lakeR.zoo.biomass<-ntl.lakeR.zoo[c(2,4)]
+ntl.lakeL.zoo.abund <- ntl.lakeL.zoo[c(2,3)]
+ntl.lakeL.zoo.biomass <- ntl.lakeL.zoo[c(2,4)]
+ntl.lakeR.zoo.abund <- ntl.lakeR.zoo[c(2,3)]
+ntl.lakeR.zoo.biomass <- ntl.lakeR.zoo[c(2,4)]
 
 #and write it:
 
@@ -588,7 +591,6 @@ write.csv(ntl.lakeR.zoo.biomass, file="cleaned_data/NTL_consumer_zoo_biomass_lak
 
 
 
-
 #Ok, now it's fish time!
 
 #LTER Package ID: knb-lter-ntl.86
@@ -596,7 +598,7 @@ write.csv(ntl.lakeR.zoo.biomass, file="cleaned_data/NTL_consumer_zoo_biomass_lak
 #ntl.fish<-read.csv(file="https://lter.limnology.wisc.edu/file/11581/download?token=oMnbKjoio1s_AUYTzqEE85BOds6xNnYnZRermDVc6sg", 
                   #header=T, na.strings=c("",".","NA"))
 
-ntl.fish<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-ntl/86/5/9dc475cd80f45f64fb79a7d6733ee20f", 
+ntl.fish <- read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-ntl/86/5/9dc475cd80f45f64fb79a7d6733ee20f", 
                    header=T, na.strings=c("",".","NA"))
 
 summary(ntl.fish)
@@ -604,28 +606,28 @@ summary(ntl.fish)
 # it's a bit inelegant and reductive, but let's just use biomass and abundance (number_per_net) as our response variables- totals per day per lake
 #for lakes R and L
 
-ntl.fish1<-ntl.fish[which(ntl.fish$lakename=="PETER"|ntl.fish$lakename=="PAUL"),]
+ntl.fish1 <- ntl.fish[which(ntl.fish$lakename=="PETER"|ntl.fish$lakename=="PAUL"),]
 
 #looks like largemouth bass should be the species of focus because they're most common
 
-ntl.fish2<-ntl.fish1[which(ntl.fish1$species=="LARGEMOUTHBASS"),]
+ntl.fish2 <- ntl.fish1[which(ntl.fish1$species=="LARGEMOUTHBASS"),]
 
 #now we count up the number of fish per sampling day, year
-ntl.fish.count<-count(ntl.fish2, c("lakename", "year4", "daynum"))
+ntl.fish.count <- count(ntl.fish2, c("lakename", "year4", "daynum"))
 
 
 #then we want to get rid of the day column, because we're just treating
 #it as reps for this analysis
 
-ntl.fish.count$daynum<-NULL
+ntl.fish.count$daynum <- NULL
 
 #divide it out by lake ID
-ntl.lakeL.fish<-ntl.fish.count[which(ntl.fish.count$lakename=="PAUL"),]
-ntl.lakeR.fish<-ntl.fish.count[which(ntl.fish.count$lakename=="PETER"),]
+ntl.lakeL.fish <- ntl.fish.count[which(ntl.fish.count$lakename=="PAUL"),]
+ntl.lakeR.fish <- ntl.fish.count[which(ntl.fish.count$lakename=="PETER"),]
 
 #remove lakename from the data frames
-ntl.lakeL.fish$lakename<-NULL
-ntl.lakeR.fish$lakename<-NULL
+ntl.lakeL.fish$lakename <- NULL
+ntl.lakeR.fish$lakename <- NULL
 
 
 #and write it:
@@ -643,7 +645,7 @@ write.csv(ntl.lakeR.fish, file="cleaned_data/NTL_predator_fish_lakeR.csv", row.n
 #sbc<-read.csv(file="https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.50.7&entityid=24d18d9ebe4f6e8b94e222840096963c", 
                    #header=T, na.strings=c("",".","NA", -99999,-99999.00))
 
-sbc<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-sbc/50/10/24d18d9ebe4f6e8b94e222840096963c", 
+sbc <- read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-sbc/50/10/24d18d9ebe4f6e8b94e222840096963c", 
               header=T, na.strings=c("",".","NA", -99999,-99999.00))
 
 summary(sbc)
@@ -653,43 +655,43 @@ summary(sbc)
 
 #ok, I think it makes sense to do this by site, let's use top-two sampled sites, CARP and NAPL
 
-sbc.1<-sbc[which(sbc$SITE=="CARP"|sbc$SITE=="NAPL"),]
+sbc.1 <- sbc[which(sbc$SITE=="CARP"|sbc$SITE=="NAPL"),]
 
 #ok, let's scale it down to our functional groups, and heck, let's aggregate it by month/transect
 
-summary.sbc<-ddply(sbc.1, c("YEAR", "MONTH", "SITE", "TRANSECT", "COARSE_GROUPING"), summarise,
+summary.sbc <- ddply(sbc.1, c("YEAR", "MONTH", "SITE", "TRANSECT", "COARSE_GROUPING"), summarise,
                          biomass=mean(DRY_GM2))
 
 #ok, ditch the NAs
-summary.sbc1<-summary.sbc[complete.cases(summary.sbc),]
+summary.sbc1 <- summary.sbc[complete.cases(summary.sbc),]
 
 #then we want to get rid of the month and transect columns, for our purposes, these are just reps within a year
 
-summary.sbc1$MONTH<-NULL
-summary.sbc1$TRANSECT<-NULL
+summary.sbc1$MONTH <- NULL
+summary.sbc1$TRANSECT <- NULL
 
 
 #divide it out by lake ID
-sbc.carp<-summary.sbc1[which(summary.sbc1$SITE=="CARP"),]
-sbc.napl<-summary.sbc1[which(summary.sbc1$SITE=="NAPL"),]
+sbc.carp <- summary.sbc1[which(summary.sbc1$SITE=="CARP"),]
+sbc.napl <- summary.sbc1[which(summary.sbc1$SITE=="NAPL"),]
 
 #remove SITE from the data frames
-sbc.carp$SITE<-NULL
-sbc.napl$SITE<-NULL
+sbc.carp$SITE <- NULL
+sbc.napl$SITE <- NULL
 
 #now we need to create an object for each of the coarse groupings
 
-sbc.carp.fish<-sbc.carp[which(sbc.carp$COARSE_GROUPING=="FISH"), c(1,3)]
-sbc.carp.kelp<-sbc.carp[which(sbc.carp$COARSE_GROUPING=="GIANT KELP"), c(1,3)]
-sbc.carp.mob.invt<-sbc.carp[which(sbc.carp$COARSE_GROUPING=="MOBILE INVERT"), c(1,3)]
-sbc.carp.ses.invt<-sbc.carp[which(sbc.carp$COARSE_GROUPING=="SESSILE INVERT"), c(1,3)]
-sbc.carp.algae<-sbc.carp[which(sbc.carp$COARSE_GROUPING=="UNDERSTORY ALGAE"), c(1,3)]
+sbc.carp.fish <- sbc.carp[which(sbc.carp$COARSE_GROUPING=="FISH"), c(1,3)]
+sbc.carp.kelp <- sbc.carp[which(sbc.carp$COARSE_GROUPING=="GIANT KELP"), c(1,3)]
+sbc.carp.mob.invt <- sbc.carp[which(sbc.carp$COARSE_GROUPING=="MOBILE INVERT"), c(1,3)]
+sbc.carp.ses.invt <- sbc.carp[which(sbc.carp$COARSE_GROUPING=="SESSILE INVERT"), c(1,3)]
+sbc.carp.algae <- sbc.carp[which(sbc.carp$COARSE_GROUPING=="UNDERSTORY ALGAE"), c(1,3)]
 
-sbc.napl.fish<-sbc.napl[which(sbc.napl$COARSE_GROUPING=="FISH"), c(1,3)]
-sbc.napl.kelp<-sbc.napl[which(sbc.napl$COARSE_GROUPING=="GIANT KELP"), c(1,3)]
-sbc.napl.mob.invt<-sbc.napl[which(sbc.napl$COARSE_GROUPING=="MOBILE INVERT"), c(1,3)]
-sbc.napl.ses.invt<-sbc.napl[which(sbc.napl$COARSE_GROUPING=="SESSILE INVERT"), c(1,3)]
-sbc.napl.algae<-sbc.napl[which(sbc.napl$COARSE_GROUPING=="UNDERSTORY ALGAE"), c(1,3)]
+sbc.napl.fish <- sbc.napl[which(sbc.napl$COARSE_GROUPING=="FISH"), c(1,3)]
+sbc.napl.kelp <- sbc.napl[which(sbc.napl$COARSE_GROUPING=="GIANT KELP"), c(1,3)]
+sbc.napl.mob.invt <- sbc.napl[which(sbc.napl$COARSE_GROUPING=="MOBILE INVERT"), c(1,3)]
+sbc.napl.ses.invt <- sbc.napl[which(sbc.napl$COARSE_GROUPING=="SESSILE INVERT"), c(1,3)]
+sbc.napl.algae <- sbc.napl[which(sbc.napl$COARSE_GROUPING=="UNDERSTORY ALGAE"), c(1,3)]
 
 
 #and now we write all these
@@ -721,3 +723,87 @@ source_github <- function(u) {
 }
 
 source("https://raw.githubusercontent.com/BahlaiLab/bad_breakup_2/master/R_model/bad_breakup_script.R")
+
+
+##Pull in the cleaned data
+
+##Konza
+
+#Plants
+grassmass.control.grass <- read.csv(file = "cleaned_data/Konza_producer_control_grass.csv")
+grassmass.control.forbs <- read.csv(file = "cleaned_data/Konza_producer_control_forbs.csv")
+grassmass.irrigated.grass <- read.csv(file="cleaned_data/Konza_producer_irrigated_grass.csv")
+grassmass.irrigated.forbs <- read.csv(file="cleaned_data/Konza_producer_irrigated_forbs.csv")
+
+#Grasshoppers
+hoppers.grazed.total <- read.csv(file="cleaned_data/Konza_herbivore_grazed_grasshopper_total.csv")
+hoppers.grazed.p.n <- read.csv(file="cleaned_data/Konza_herbivore_grazed_grasshopper_pn.csv")
+hoppers.grazed.o.s <- read.csv(file="cleaned_data/Konza_herbivore_grazed_grasshopper_os.csv")
+hoppers.ungrazed.total <- read.csv(file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_total.csv")
+hoppers.ungrazed.p.n <- read.csv(file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_pn.csv")
+hoppers.ungrazed.o.s <- read.csv(file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_os.csv")
+
+#Mammals
+mammals.grazed.total <- read.csv(file="cleaned_data/Konza_omnivore_grazed_mammal_total.csv")
+mammals.grazed.pl <- read.csv(file="cleaned_data/Konza_omnivore_grazed_mammal_pl.csv")
+mammals.grazed.pm <- read.csv(file="cleaned_data/Konza_omnivore_grazed_mammal_pm.csv")
+mammals.ungrazed.total <- read.csv(file="cleaned_data/Konza_omnivore_ungrazed_mammal_total.csv")
+mammals.ungrazed.pl <- read.csv(file="cleaned_data/Konza_omnivore_ungrazed_mammal_pl.csv")
+mammals.ungrazed.pm <- read.csv(file="cleaned_data/Konza_omnivore_ungrazed_mammal_pm.csv")
+
+
+##Hubbard Brook
+
+#Litter
+hub.litter.mass <- read.csv(file="cleaned_data/Hubbard_producer_litter_mass.csv")
+
+#Lepidoptera
+hub.leps.maple.biomass <- read.csv(file="cleaned_data/Hubbard_herbivore_maple_biomass.csv")
+hub.leps.maple.individuals <- read.csv(file="cleaned_data/Hubbard_herbivore_maple_abundance.csv")
+hub.leps.beech.biomass <- read.csv(file="cleaned_data/Hubbard_herbivore_beech_biomass.csv")
+hub.leps.beech.individuals <- read.csv(file="cleaned_data/Hubbard_herbivore_beech_abundance.csv")
+
+#Birds
+hub.birds.total <- read.csv(file="cleaned_data/Hubbard_omnivore_bird_total.csv")
+hub.birds.redstart <- read.csv(file="cleaned_data/Hubbard_omnivore_bird_redstart.csv")
+hub.birds.vireo <- read.csv(file="cleaned_data/Hubbard_omnivore_bird_vireo.csv")
+
+
+##North Temperate Lakes
+
+#Chlorophyll
+ntl.lakeL.chlor <- read.csv(file="cleaned_data/NTL_producer_chlorA_lakeL.csv")
+ntl.lakeR.chlor <- read.csv(file="cleaned_data/NTL_producer_chlorA_lakeR.csv")
+
+#Zooplankton
+ntl.lakeL.zoo.abund <- read.csv(file="cleaned_data/NTL_consumer_zoo_abund_lakeL.csv")
+ntl.lakeR.zoo.abund <- read.csv(file="cleaned_data/NTL_consumer_zoo_abund_lakeR.csv")
+ntl.lakeL.zoo.biomass <- read.csv(file="cleaned_data/NTL_consumer_zoo_biomass_lakeL.csv")
+ntl.lakeR.zoo.biomass <- read.csv(file="cleaned_data/NTL_consumer_zoo_biomass_lakeR.csv")
+
+#Fish
+ntl.lakeL.fish <- read.csv(file="cleaned_data/NTL_predator_fish_lakeL.csv")
+ntl.lakeR.fish <- read.csv(file="cleaned_data/NTL_predator_fish_lakeR.csv")
+
+
+##Santa Barbara Coastal
+
+#Kelp,Algae
+sbc.carp.kelp <- read.csv(file="cleaned_data/SBC_producer_kelp_carp.csv")
+sbc.carp.algae <- read.csv(file="cleaned_data/SBC_producer_algae_carp.csv")
+sbc.napl.kelp <- read.csv(file="cleaned_data/SBC_producer_kelp_napl.csv")
+sbc.napl.algae <- read.csv(file="cleaned_data/SBC_producer_algae_napl.csv")
+
+#Invertebrates
+sbc.carp.mob.invt <- read.csv(file="cleaned_data/SBC_consumer_minvert_carp.csv")
+sbc.carp.ses.invt <- read.csv(file="cleaned_data/SBC_consumer_sinvert_carp.csv")
+sbc.napl.mob.invt <- read.csv( file="cleaned_data/SBC_consumer_minvert_napl.csv")
+sbc.napl.ses.invt <- read.csv(file="cleaned_data/SBC_consumer_sinvert_napl.csv")
+
+#Fish
+sbc.carp.fish <- read.csv(file="cleaned_data/SBC_predator_fish_carp.csv")
+sbc.napl.fish <- read.csv(file="cleaned_data/SBC_predator_fish_napl.csv")
+
+
+
+
