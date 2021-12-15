@@ -45,24 +45,32 @@ grassmass.control.grass <- grassmass.control
 grassmass.control.grass$avg.FORBS <- NULL
 grassmass.control.grass$PLOT <- NULL
 grassmass.control.grass$TRANSECT <- NULL
+summary(grassmass.control.grass)
+
+#there is a missing value in 2017, so let's remove it
+grassmass.control.grass <- grassmass.control.grass[complete.cases(grassmass.control.grass),]
+summary(grassmass.control.grass)
 
 #control forbs
 grassmass.control.forbs <- grassmass.control
 grassmass.control.forbs$avg.LIVEGRASS <- NULL
 grassmass.control.forbs$PLOT <- NULL
 grassmass.control.forbs$TRANSECT <- NULL
+summary(grassmass.control.forbs)
 
 #irrigated grass
 grassmass.irrigated.grass <- grassmass.irrigated
 grassmass.irrigated.grass$avg.FORBS <- NULL
 grassmass.irrigated.grass$PLOT <- NULL
 grassmass.irrigated.grass$TRANSECT <- NULL
+summary(grassmass.irrigated.grass)
 
 #irrigated forbs
 grassmass.irrigated.forbs <- grassmass.irrigated
 grassmass.irrigated.forbs$avg.LIVEGRASS <- NULL
 grassmass.irrigated.forbs$PLOT <- NULL
 grassmass.irrigated.forbs$TRANSECT <- NULL
+summary(grassmass.irrigated.forbs)
 
 #now let's write the intermediate cleaned data products into a folder
 
@@ -279,9 +287,6 @@ write.csv(hoppers.ungrazed.o.s, file="cleaned_data/Konza_herbivore_ungrazed_gras
 
 #LTER Package ID: knb-lter-knz.88
 
-#mammals<-read.csv(file="https://portal.lternet.edu/nis/dataviewer?packageid=knb-lter-knz.88.7&entityid=1ced8529601926470f68c1d5eb708350", 
-                  #header=T, na.strings=c("",".","NA"))
-
 mammals<-read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-knz/88/8/1ced8529601926470f68c1d5eb708350", 
                   header=T, na.strings=c("",".","NA"))
 
@@ -321,7 +326,7 @@ mammals.ungrazed.pl <- mammals.ungrazed[c(1,3)]
 mammals.ungrazed.pm <- mammals.ungrazed[c(1,4)]
 
 
-#all right,here we go, write the data
+#all right, here we go, write the data
 
 write.csv(mammals.grazed.total, file="cleaned_data/Konza_omnivore_grazed_mammal_total.csv", row.names=FALSE)
 write.csv(mammals.grazed.pl, file="cleaned_data/Konza_omnivore_grazed_mammal_pl.csv", row.names=FALSE)
@@ -595,9 +600,6 @@ write.csv(ntl.lakeR.zoo.biomass, file="cleaned_data/NTL_consumer_zoo_biomass_lak
 
 #LTER Package ID: knb-lter-ntl.86
 
-#ntl.fish<-read.csv(file="https://lter.limnology.wisc.edu/file/11581/download?token=oMnbKjoio1s_AUYTzqEE85BOds6xNnYnZRermDVc6sg", 
-                  #header=T, na.strings=c("",".","NA"))
-
 ntl.fish <- read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-ntl/86/5/9dc475cd80f45f64fb79a7d6733ee20f", 
                    header=T, na.strings=c("",".","NA"))
 
@@ -641,9 +643,6 @@ write.csv(ntl.lakeR.fish, file="cleaned_data/NTL_predator_fish_lakeR.csv", row.n
 #that's handy. Let's bring this data in. Notes said it's a big dataset so warning this might be a bit slow
 
 #LTER Package ID: knb-lter-sbc.50
-
-#sbc<-read.csv(file="https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.50.7&entityid=24d18d9ebe4f6e8b94e222840096963c", 
-                   #header=T, na.strings=c("",".","NA", -99999,-99999.00))
 
 sbc <- read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-sbc/50/10/24d18d9ebe4f6e8b94e222840096963c", 
               header=T, na.strings=c("",".","NA", -99999,-99999.00))
@@ -724,16 +723,70 @@ source_github <- function(u) {
 
 source("https://raw.githubusercontent.com/BahlaiLab/bad_breakup_2/master/R_model/bad_breakup_script.R")
 
+options(scipen=10)
 
-##Pull in the cleaned data
-
-##Konza
+#Let's start with Konza Prairie
 
 #Plants
 grassmass.control.grass <- read.csv(file = "cleaned_data/Konza_producer_control_grass.csv")
 grassmass.control.forbs <- read.csv(file = "cleaned_data/Konza_producer_control_forbs.csv")
 grassmass.irrigated.grass <- read.csv(file="cleaned_data/Konza_producer_irrigated_grass.csv")
 grassmass.irrigated.forbs <- read.csv(file="cleaned_data/Konza_producer_irrigated_forbs.csv")
+
+
+model.grassmass.control.grass <- multiple_breakups(grassmass.control.grass)
+pyramid_plot(model.grassmass.control.grass, title="Grass Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+stability_time(model.grassmass.control.grass, error_multiplyer = 1)
+abs_range(model.grassmass.control.grass, only_significant = FALSE, significance = 0.05)
+relative_range(model.grassmass.control.grass, only_significant = FALSE, significance = 0.05)
+proportion_significant(model.grassmass.control.grass, significance = 0.05)
+proportion_wrong(model.grassmass.control.grass, significance = 0.01)
+proportion_wrong_series(model.grassmass.control.grass, significance = 0.05)
+proportion_wrong_before_stability(model.grassmass.control.grass, significance = 0.05) #this doesn't work. Do I need to put in 
+#the output for the proportion wrong series rather than the model?
+wrongness_plot(model.grassmass.control.grass)
+broken_stick_plot(model.grassmass.control.grass, window_length = 4, significance = 0.5)
+make_stick_pile_gif(model.grassmass.control.grass)
+
+model.grassmass.control.forbs <- multiple_breakups(grassmass.control.forbs)
+pyramid_plot(model.grassmass.control.forbs, title="Forb Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+stability_time(model.grassmass.control.forbs, error_multiplyer = 1)
+abs_range(model.grassmass.control.forbs, only_significant = FALSE, significance = 0.05)
+relative_range(model.grassmass.control.forbs, only_significant = FALSE, significance = 0.05)
+proportion_significant(model.grassmass.control.forbs, significance = 0.05)
+proportion_wrong(model.grassmass.control.forbs, significance = 0.01)
+proportion_wrong_series(model.grassmass.control.forbs, significance = 0.05)
+proportion_wrong_before_stability(model.grassmass.control.forbs, significance = 0.05) #this doesn't work. Do I need to put in 
+#the output for the proportion wrong series rather than the model?
+wrongness_plot(model.grassmass.control.forbs)
+broken_stick_plot(model.grassmass.control.forbs, window_length = 4, significance = 0.5)
+
+model.grassmass.irrigated.grass <- multiple_breakups(grassmass.irrigated.grass)
+pyramid_plot(model.grassmass.irrigated.grass, title="Grass Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+stability_time(model.grassmass.irrigated.grass, error_multiplyer = 1)
+abs_range(model.grassmass.irrigated.grass, only_significant = FALSE, significance = 0.05)
+relative_range(model.grassmass.irrigated.grass, only_significant = FALSE, significance = 0.05)
+proportion_significant(model.grassmass.irrigated.grass, significance = 0.05)
+proportion_wrong(model.grassmass.irrigated.grass, significance = 0.01)
+proportion_wrong_series(model.grassmass.irrigated.grass, significance = 0.05)
+proportion_wrong_before_stability(model.grassmass.irrigated.grass, significance = 0.05) #this doesn't work. Do I need to put in 
+#the output for the proportion wrong series rather than the model?
+wrongness_plot(model.grassmass.irrigated.grass)
+broken_stick_plot(model.grassmass.irrigated.grass, window_length = 4, significance = 0.5)
+
+model.grassmass.irrigated.forbs <- multiple_breakups(grassmass.irrigated.forbs)
+pyramid_plot(model.grassmass.irrigated.forbs, title="Forb Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+stability_time(model.grassmass.irrigated.forbs, error_multiplyer = 1)
+abs_range(model.grassmass.irrigated.forbs, only_significant = FALSE, significance = 0.05)
+relative_range(model.grassmass.irrigated.forbs, only_significant = FALSE, significance = 0.05)
+proportion_significant(model.grassmass.irrigated.forbs, significance = 0.05)
+proportion_wrong(model.grassmass.irrigated.forbs, significance = 0.01)
+proportion_wrong_series(model.grassmass.irrigated.forbs, significance = 0.05)
+proportion_wrong_before_stability(model.grassmass.irrigated.forbs, significance = 0.05) #this doesn't work. Do I need to put in 
+#the output for the proportion wrong series rather than the model?
+wrongness_plot(model.grassmass.irrigated.forbs)
+broken_stick_plot(model.grassmass.irrigated.forbs, window_length = 4, significance = 0.5)
+
 
 #Grasshoppers
 hoppers.grazed.total <- read.csv(file="cleaned_data/Konza_herbivore_grazed_grasshopper_total.csv")
@@ -803,7 +856,6 @@ sbc.napl.ses.invt <- read.csv(file="cleaned_data/SBC_consumer_sinvert_napl.csv")
 #Fish
 sbc.carp.fish <- read.csv(file="cleaned_data/SBC_predator_fish_carp.csv")
 sbc.napl.fish <- read.csv(file="cleaned_data/SBC_predator_fish_napl.csv")
-
 
 
 
