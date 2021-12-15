@@ -736,57 +736,48 @@ grassmass.irrigated.forbs <- read.csv(file="cleaned_data/Konza_producer_irrigate
 
 model.grassmass.control.grass <- multiple_breakups(grassmass.control.grass)
 pyramid_plot(model.grassmass.control.grass, title="Grass Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-stability_time(model.grassmass.control.grass, error_multiplyer = 1)
-abs_range(model.grassmass.control.grass, only_significant = FALSE, significance = 0.05)
-relative_range(model.grassmass.control.grass, only_significant = FALSE, significance = 0.05)
-proportion_significant(model.grassmass.control.grass, significance = 0.05)
-proportion_wrong(model.grassmass.control.grass, significance = 0.01)
-proportion_wrong_series(model.grassmass.control.grass, significance = 0.05)
-proportion_wrong_before_stability(model.grassmass.control.grass, significance = 0.05) #this doesn't work. Do I need to put in 
-#the output for the proportion wrong series rather than the model?
 wrongness_plot(model.grassmass.control.grass)
 broken_stick_plot(model.grassmass.control.grass, window_length = 4, significance = 0.5)
-make_stick_pile_gif(model.grassmass.control.grass)
+
+#add some descriptive columns
+model.grassmass.control.grass$site <- rep(c("konza"),each = 406)
+model.grassmass.control.grass$trmt <- rep(c("control"),each = 406)
+model.grassmass.control.grass$taxa <- rep(c("grass"),each = 406)
+model.grassmass.control.grass$trophic_level <- rep(c("producer"),each = 406)
 
 model.grassmass.control.forbs <- multiple_breakups(grassmass.control.forbs)
 pyramid_plot(model.grassmass.control.forbs, title="Forb Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-stability_time(model.grassmass.control.forbs, error_multiplyer = 1)
-abs_range(model.grassmass.control.forbs, only_significant = FALSE, significance = 0.05)
-relative_range(model.grassmass.control.forbs, only_significant = FALSE, significance = 0.05)
-proportion_significant(model.grassmass.control.forbs, significance = 0.05)
-proportion_wrong(model.grassmass.control.forbs, significance = 0.01)
-proportion_wrong_series(model.grassmass.control.forbs, significance = 0.05)
-proportion_wrong_before_stability(model.grassmass.control.forbs, significance = 0.05) #this doesn't work. Do I need to put in 
-#the output for the proportion wrong series rather than the model?
 wrongness_plot(model.grassmass.control.forbs)
 broken_stick_plot(model.grassmass.control.forbs, window_length = 4, significance = 0.5)
 
+model.grassmass.control.forbs$site <- rep(c("konza"),each = 406)
+model.grassmass.control.forbs$trmt <- rep(c("control"),each = 406)
+model.grassmass.control.forbs$taxa <- rep(c("forbs"),each = 406)
+model.grassmass.control.forbs$trophic_level <- rep(c("producer"),each = 406)
+
 model.grassmass.irrigated.grass <- multiple_breakups(grassmass.irrigated.grass)
 pyramid_plot(model.grassmass.irrigated.grass, title="Grass Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-stability_time(model.grassmass.irrigated.grass, error_multiplyer = 1)
-abs_range(model.grassmass.irrigated.grass, only_significant = FALSE, significance = 0.05)
-relative_range(model.grassmass.irrigated.grass, only_significant = FALSE, significance = 0.05)
-proportion_significant(model.grassmass.irrigated.grass, significance = 0.05)
-proportion_wrong(model.grassmass.irrigated.grass, significance = 0.01)
-proportion_wrong_series(model.grassmass.irrigated.grass, significance = 0.05)
-proportion_wrong_before_stability(model.grassmass.irrigated.grass, significance = 0.05) #this doesn't work. Do I need to put in 
-#the output for the proportion wrong series rather than the model?
 wrongness_plot(model.grassmass.irrigated.grass)
 broken_stick_plot(model.grassmass.irrigated.grass, window_length = 4, significance = 0.5)
 
+model.grassmass.irrigated.grass$site <- rep(c("konza"),each = 300)
+model.grassmass.irrigated.grass$trmt <- rep(c("irrigated"),each = 300)
+model.grassmass.irrigated.grass$taxa <- rep(c("grass"),each = 300)
+model.grassmass.irrigated.grass$trophic_level <- rep(c("producer"),each = 300)
+
 model.grassmass.irrigated.forbs <- multiple_breakups(grassmass.irrigated.forbs)
 pyramid_plot(model.grassmass.irrigated.forbs, title="Forb Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-stability_time(model.grassmass.irrigated.forbs, error_multiplyer = 1)
-abs_range(model.grassmass.irrigated.forbs, only_significant = FALSE, significance = 0.05)
-relative_range(model.grassmass.irrigated.forbs, only_significant = FALSE, significance = 0.05)
-proportion_significant(model.grassmass.irrigated.forbs, significance = 0.05)
-proportion_wrong(model.grassmass.irrigated.forbs, significance = 0.01)
-proportion_wrong_series(model.grassmass.irrigated.forbs, significance = 0.05)
-proportion_wrong_before_stability(model.grassmass.irrigated.forbs, significance = 0.05) #this doesn't work. Do I need to put in 
-#the output for the proportion wrong series rather than the model?
 wrongness_plot(model.grassmass.irrigated.forbs)
 broken_stick_plot(model.grassmass.irrigated.forbs, window_length = 4, significance = 0.5)
 
+model.grassmass.irrigated.forbs$site <- rep(c("konza"),each = 300)
+model.grassmass.irrigated.forbs$trmt <- rep(c("irrigated"),each = 300)
+model.grassmass.irrigated.forbs$taxa <- rep(c("forbs"),each = 300)
+model.grassmass.irrigated.forbs$trophic_level <- rep(c("producer"),each = 300)
+
+#now merge all dataframes together
+model.grassmass <- rbind(model.grassmass.control.grass, model.grassmass.control.forbs,
+                         model.grassmass.irrigated.grass, model.grassmass.irrigated.forbs)
 
 #Grasshoppers
 hoppers.grazed.total <- read.csv(file="cleaned_data/Konza_herbivore_grazed_grasshopper_total.csv")
@@ -796,13 +787,150 @@ hoppers.ungrazed.total <- read.csv(file="cleaned_data/Konza_herbivore_ungrazed_g
 hoppers.ungrazed.p.n <- read.csv(file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_pn.csv")
 hoppers.ungrazed.o.s <- read.csv(file="cleaned_data/Konza_herbivore_ungrazed_grasshopper_os.csv")
 
+summary(hoppers.grazed.total)
+model.hoppers.grazed.total <- multiple_breakups(hoppers.grazed.total)
+pyramid_plot(model.hoppers.grazed.total, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hoppers.grazed.total)
+broken_stick_plot(model.hoppers.grazed.total, window_length = 4, significance = 0.5)
+
+model.hoppers.grazed.total$site <- rep(c("konza"),each = 153)
+model.hoppers.grazed.total$trmt <- rep(c("grazed"),each = 153)
+model.hoppers.grazed.total$taxa <- rep(c("grasshoppers_total"),each = 153)
+model.hoppers.grazed.total$trophic_level <- rep(c("herbivore"),each = 153)
+
+summary(hoppers.grazed.p.n)
+model.hoppers.grazed.p.n <- multiple_breakups(hoppers.grazed.p.n)
+pyramid_plot(model.hoppers.grazed.p.n, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hoppers.grazed.p.n)
+broken_stick_plot(model.hoppers.grazed.p.n, window_length = 4, significance = 0.5)
+
+model.hoppers.grazed.p.n$site <- rep(c("konza"),each = 153)
+model.hoppers.grazed.p.n$trmt <- rep(c("grazed"),each = 153)
+model.hoppers.grazed.p.n$taxa <- rep(c("grasshoppers_pn"),each = 153)
+model.hoppers.grazed.p.n$trophic_level <- rep(c("herbivore"),each = 153)
+
+summary(hoppers.grazed.o.s)
+model.hoppers.grazed.o.s <- multiple_breakups(hoppers.grazed.o.s)
+pyramid_plot(model.hoppers.grazed.o.s, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hoppers.grazed.o.s)
+broken_stick_plot(model.hoppers.grazed.o.s, window_length = 4, significance = 0.5)
+
+model.hoppers.grazed.o.s$site <- rep(c("konza"),each = 153)
+model.hoppers.grazed.o.s$trmt <- rep(c("grazed"),each = 153)
+model.hoppers.grazed.o.s$taxa <- rep(c("grasshoppers_os"),each = 153)
+model.hoppers.grazed.o.s$trophic_level <- rep(c("herbivore"),each = 153)
+
+summary(hoppers.ungrazed.total)
+model.hoppers.ungrazed.total <- multiple_breakups(hoppers.ungrazed.total)
+pyramid_plot(model.hoppers.ungrazed.total, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hoppers.ungrazed.total)
+broken_stick_plot(model.hoppers.ungrazed.total, window_length = 4, significance = 0.5)
+
+model.hoppers.ungrazed.total$site <- rep(c("konza"),each = 276)
+model.hoppers.ungrazed.total$trmt <- rep(c("ungrazed"),each = 276)
+model.hoppers.ungrazed.total$taxa <- rep(c("grasshoppers_total"),each = 276)
+model.hoppers.ungrazed.total$trophic_level <- rep(c("herbivore"),each = 276)
+
+summary(hoppers.ungrazed.p.n)
+model.hoppers.ungrazed.p.n <- multiple_breakups(hoppers.ungrazed.p.n)
+pyramid_plot(model.hoppers.ungrazed.p.n, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hoppers.ungrazed.p.n)
+broken_stick_plot(model.hoppers.ungrazed.p.n, window_length = 4, significance = 0.5)
+
+model.hoppers.ungrazed.p.n$site <- rep(c("konza"),each = 276)
+model.hoppers.ungrazed.p.n$trmt <- rep(c("ungrazed"),each = 276)
+model.hoppers.ungrazed.p.n$taxa <- rep(c("grasshoppers_pn"),each = 276)
+model.hoppers.ungrazed.p.n$trophic_level <- rep(c("herbivore"),each = 276)
+
+summary(hoppers.ungrazed.o.s)
+model.hoppers.ungrazed.o.s <- multiple_breakups(hoppers.ungrazed.o.s)
+pyramid_plot(model.hoppers.ungrazed.o.s, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hoppers.ungrazed.o.s)
+broken_stick_plot(model.hoppers.ungrazed.o.s, window_length = 4, significance = 0.5)
+
+model.hoppers.ungrazed.o.s$site <- rep(c("konza"),each = 276)
+model.hoppers.ungrazed.o.s$trmt <- rep(c("ungrazed"),each = 276)
+model.hoppers.ungrazed.o.s$taxa <- rep(c("grasshoppers_os"),each = 276)
+model.hoppers.ungrazed.o.s$trophic_level <- rep(c("herbivore"),each = 276)
+
+#now merge all dataframes together
+model.hoppers <- rbind(model.hoppers.grazed.total, model.hoppers.grazed.p.n, model.hoppers.grazed.o.s,
+                       model.hoppers.ungrazed.total, model.hoppers.ungrazed.p.n, model.hoppers.ungrazed.o.s)
+
+
 #Mammals
 mammals.grazed.total <- read.csv(file="cleaned_data/Konza_omnivore_grazed_mammal_total.csv")
 mammals.grazed.pl <- read.csv(file="cleaned_data/Konza_omnivore_grazed_mammal_pl.csv")
 mammals.grazed.pm <- read.csv(file="cleaned_data/Konza_omnivore_grazed_mammal_pm.csv")
 mammals.ungrazed.total <- read.csv(file="cleaned_data/Konza_omnivore_ungrazed_mammal_total.csv")
-mammals.ungrazed.pl <- read.csv(file="cleaned_data/Konza_omnivore_ungrazed_mammal_pl.csv")
+mammals.ungrazed.pl <- read.csv(file="cleaned_data/Konza_omnivore_ungrazed_mammal_pl.csv")#not enough individuals in ungrazed treatment
 mammals.ungrazed.pm <- read.csv(file="cleaned_data/Konza_omnivore_ungrazed_mammal_pm.csv")
+
+summary(mammals.grazed.total)
+model.mammals.grazed.total <- multiple_breakups(mammals.grazed.total)
+pyramid_plot(model.mammals.grazed.total, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.mammals.grazed.total)
+broken_stick_plot(model.mammals.grazed.total, window_length = 4, significance = 0.5)
+
+model.mammals.grazed.total$site <- rep(c("konza"),each = 496)
+model.mammals.grazed.total$trmt <- rep(c("grazed"),each = 496)
+model.mammals.grazed.total$taxa <- rep(c("mammals_total"),each = 496)
+model.mammals.grazed.total$trophic_level <- rep(c("omnivore"),each = 496)
+
+#summary(mammals.grazed.pl)
+#model.mammals.grazed.pl <- multiple_breakups(mammals.grazed.pl)
+#pyramid_plot(model.mammals.grazed.pl, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+#wrongness_plot(model.mammals.grazed.pl)
+#broken_stick_plot(model.mammals.grazed.pl, window_length = 4, significance = 0.5)
+
+summary(mammals.grazed.pm)
+model.mammals.grazed.pm <- multiple_breakups(mammals.grazed.pm)
+pyramid_plot(model.mammals.grazed.pm, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.mammals.grazed.pm)
+broken_stick_plot(model.mammals.grazed.pm, window_length = 4, significance = 0.5)
+
+model.mammals.grazed.pm$site <- rep(c("konza"),each = 496)
+model.mammals.grazed.pm$trmt <- rep(c("grazed"),each = 496)
+model.mammals.grazed.pm$taxa <- rep(c("mammals_pm"),each = 496)
+model.mammals.grazed.pm$trophic_level <- rep(c("omnivore"),each = 496)
+
+summary(mammals.ungrazed.total)
+model.mammals.ungrazed.total <- multiple_breakups(mammals.ungrazed.total)
+pyramid_plot(model.mammals.ungrazed.total, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.mammals.ungrazed.total)
+broken_stick_plot(model.mammals.ungrazed.total, window_length = 4, significance = 0.5)
+
+model.mammals.ungrazed.total$site <- rep(c("konza"),each = 496)
+model.mammals.ungrazed.total$trmt <- rep(c("ungrazed"),each = 496)
+model.mammals.ungrazed.total$taxa <- rep(c("mammals_total"),each = 496)
+model.mammals.ungrazed.total$trophic_level <- rep(c("omnivore"),each = 496)
+
+#summary(mammals.ungrazed.pl)
+#colSums(mammals.ungrazed.pl) #I don't think there are enough individuals in the ungrazed treatment to use this species
+#model.mammals.ungrazed.pl <- multiple_breakups(mammals.ungrazed.pl)
+#pyramid_plot(model.mammals.ungrazed.pl, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+#wrongness_plot(model.mammals.ungrazed.pl)
+#broken_stick_plot(model.mammals.ungrazed.pl, window_length = 4, significance = 0.5)
+
+summary(mammals.ungrazed.pm)
+model.mammals.ungrazed.pm <- multiple_breakups(mammals.ungrazed.pm)
+pyramid_plot(model.mammals.ungrazed.pm, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.mammals.ungrazed.pm)
+broken_stick_plot(model.mammals.ungrazed.pm, window_length = 4, significance = 0.5)
+
+model.mammals.ungrazed.pm$site <- rep(c("konza"),each = 496)
+model.mammals.ungrazed.pm$trmt <- rep(c("ungrazed"),each = 496)
+model.mammals.ungrazed.pm$taxa <- rep(c("mammals_pm"),each = 496)
+model.mammals.ungrazed.pm$trophic_level <- rep(c("omnivore"),each = 496)
+
+#now merge all dataframes together
+model.mammals <- rbind(model.mammals.grazed.total, model.mammals.grazed.pm,
+                       model.mammals.ungrazed.total, model.mammals.ungrazed.pm)
+
+
+#now merge all konza dataframes together and save
+model.konza <- rbind(model.grassmass, model.hoppers, model.mammals)
+write.csv(model.konza, file="model_output/model_konza.csv", row.names=FALSE)
 
 
 ##Hubbard Brook
