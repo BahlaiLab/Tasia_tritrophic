@@ -1200,4 +1200,14 @@ model.sbc.fish <- rbind(model.sbc.carp.fish, model.sbc.napl.fish)
 model.sbcoastal <- rbind(model.kelp.algae, model.invt, model.sbc.fish)
 write.csv(model.sbcoastal, file="model_output/model_santa_barbara_coastal.csv", row.names=FALSE)
 
+#now merge all model outputs for the four LTER sites
+model.konza <- read.csv(file="model_output/model_konza.csv")
+model.hbrook <- read.csv(file="model_output/model_hubbard_brook.csv")
+model.ntlakes <- read.csv(file="model_output/model_north_temperate_lakes.csv")
+model.sbcoastal <- read.csv(file="model_output/model_santa_barbara_coastal.csv")
+
+model.lter <- rbind(model.konza, model.hbrook, model.ntlakes, model.sbcoastal)
+write.csv(model.lter, file="model_output/model_all_LTER_sites.csv", row.names=FALSE)
+
+
 
