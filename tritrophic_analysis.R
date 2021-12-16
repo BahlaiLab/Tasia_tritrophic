@@ -733,11 +733,7 @@ grassmass.control.forbs <- read.csv(file = "cleaned_data/Konza_producer_control_
 grassmass.irrigated.grass <- read.csv(file="cleaned_data/Konza_producer_irrigated_grass.csv")
 grassmass.irrigated.forbs <- read.csv(file="cleaned_data/Konza_producer_irrigated_forbs.csv")
 
-
 model.grassmass.control.grass <- multiple_breakups(grassmass.control.grass)
-pyramid_plot(model.grassmass.control.grass, title="Grass Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.grassmass.control.grass)
-broken_stick_plot(model.grassmass.control.grass, window_length = 4, significance = 0.5)
 
 #add some descriptive columns
 model.grassmass.control.grass$site <- rep(c("konza"),each = 406)
@@ -746,9 +742,6 @@ model.grassmass.control.grass$taxa <- rep(c("grass"),each = 406)
 model.grassmass.control.grass$trophic_level <- rep(c("producer"),each = 406)
 
 model.grassmass.control.forbs <- multiple_breakups(grassmass.control.forbs)
-pyramid_plot(model.grassmass.control.forbs, title="Forb Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.grassmass.control.forbs)
-broken_stick_plot(model.grassmass.control.forbs, window_length = 4, significance = 0.5)
 
 model.grassmass.control.forbs$site <- rep(c("konza"),each = 406)
 model.grassmass.control.forbs$trmt <- rep(c("control"),each = 406)
@@ -756,9 +749,6 @@ model.grassmass.control.forbs$taxa <- rep(c("forbs"),each = 406)
 model.grassmass.control.forbs$trophic_level <- rep(c("producer"),each = 406)
 
 model.grassmass.irrigated.grass <- multiple_breakups(grassmass.irrigated.grass)
-pyramid_plot(model.grassmass.irrigated.grass, title="Grass Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.grassmass.irrigated.grass)
-broken_stick_plot(model.grassmass.irrigated.grass, window_length = 4, significance = 0.5)
 
 model.grassmass.irrigated.grass$site <- rep(c("konza"),each = 300)
 model.grassmass.irrigated.grass$trmt <- rep(c("irrigated"),each = 300)
@@ -766,9 +756,6 @@ model.grassmass.irrigated.grass$taxa <- rep(c("grass"),each = 300)
 model.grassmass.irrigated.grass$trophic_level <- rep(c("producer"),each = 300)
 
 model.grassmass.irrigated.forbs <- multiple_breakups(grassmass.irrigated.forbs)
-pyramid_plot(model.grassmass.irrigated.forbs, title="Forb Biomass", plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.grassmass.irrigated.forbs)
-broken_stick_plot(model.grassmass.irrigated.forbs, window_length = 4, significance = 0.5)
 
 model.grassmass.irrigated.forbs$site <- rep(c("konza"),each = 300)
 model.grassmass.irrigated.forbs$trmt <- rep(c("irrigated"),each = 300)
@@ -789,9 +776,6 @@ hoppers.ungrazed.o.s <- read.csv(file="cleaned_data/Konza_herbivore_ungrazed_gra
 
 summary(hoppers.grazed.total)
 model.hoppers.grazed.total <- multiple_breakups(hoppers.grazed.total)
-pyramid_plot(model.hoppers.grazed.total, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hoppers.grazed.total)
-broken_stick_plot(model.hoppers.grazed.total, window_length = 4, significance = 0.5)
 
 model.hoppers.grazed.total$site <- rep(c("konza"),each = 153)
 model.hoppers.grazed.total$trmt <- rep(c("grazed"),each = 153)
@@ -800,9 +784,6 @@ model.hoppers.grazed.total$trophic_level <- rep(c("herbivore"),each = 153)
 
 summary(hoppers.grazed.p.n)
 model.hoppers.grazed.p.n <- multiple_breakups(hoppers.grazed.p.n)
-pyramid_plot(model.hoppers.grazed.p.n, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hoppers.grazed.p.n)
-broken_stick_plot(model.hoppers.grazed.p.n, window_length = 4, significance = 0.5)
 
 model.hoppers.grazed.p.n$site <- rep(c("konza"),each = 153)
 model.hoppers.grazed.p.n$trmt <- rep(c("grazed"),each = 153)
@@ -811,9 +792,6 @@ model.hoppers.grazed.p.n$trophic_level <- rep(c("herbivore"),each = 153)
 
 summary(hoppers.grazed.o.s)
 model.hoppers.grazed.o.s <- multiple_breakups(hoppers.grazed.o.s)
-pyramid_plot(model.hoppers.grazed.o.s, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hoppers.grazed.o.s)
-broken_stick_plot(model.hoppers.grazed.o.s, window_length = 4, significance = 0.5)
 
 model.hoppers.grazed.o.s$site <- rep(c("konza"),each = 153)
 model.hoppers.grazed.o.s$trmt <- rep(c("grazed"),each = 153)
@@ -822,9 +800,6 @@ model.hoppers.grazed.o.s$trophic_level <- rep(c("herbivore"),each = 153)
 
 summary(hoppers.ungrazed.total)
 model.hoppers.ungrazed.total <- multiple_breakups(hoppers.ungrazed.total)
-pyramid_plot(model.hoppers.ungrazed.total, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hoppers.ungrazed.total)
-broken_stick_plot(model.hoppers.ungrazed.total, window_length = 4, significance = 0.5)
 
 model.hoppers.ungrazed.total$site <- rep(c("konza"),each = 276)
 model.hoppers.ungrazed.total$trmt <- rep(c("ungrazed"),each = 276)
@@ -833,9 +808,6 @@ model.hoppers.ungrazed.total$trophic_level <- rep(c("herbivore"),each = 276)
 
 summary(hoppers.ungrazed.p.n)
 model.hoppers.ungrazed.p.n <- multiple_breakups(hoppers.ungrazed.p.n)
-pyramid_plot(model.hoppers.ungrazed.p.n, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hoppers.ungrazed.p.n)
-broken_stick_plot(model.hoppers.ungrazed.p.n, window_length = 4, significance = 0.5)
 
 model.hoppers.ungrazed.p.n$site <- rep(c("konza"),each = 276)
 model.hoppers.ungrazed.p.n$trmt <- rep(c("ungrazed"),each = 276)
@@ -844,9 +816,6 @@ model.hoppers.ungrazed.p.n$trophic_level <- rep(c("herbivore"),each = 276)
 
 summary(hoppers.ungrazed.o.s)
 model.hoppers.ungrazed.o.s <- multiple_breakups(hoppers.ungrazed.o.s)
-pyramid_plot(model.hoppers.ungrazed.o.s, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hoppers.ungrazed.o.s)
-broken_stick_plot(model.hoppers.ungrazed.o.s, window_length = 4, significance = 0.5)
 
 model.hoppers.ungrazed.o.s$site <- rep(c("konza"),each = 276)
 model.hoppers.ungrazed.o.s$trmt <- rep(c("ungrazed"),each = 276)
@@ -868,9 +837,6 @@ mammals.ungrazed.pm <- read.csv(file="cleaned_data/Konza_omnivore_ungrazed_mamma
 
 summary(mammals.grazed.total)
 model.mammals.grazed.total <- multiple_breakups(mammals.grazed.total)
-pyramid_plot(model.mammals.grazed.total, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.mammals.grazed.total)
-broken_stick_plot(model.mammals.grazed.total, window_length = 4, significance = 0.5)
 
 model.mammals.grazed.total$site <- rep(c("konza"),each = 496)
 model.mammals.grazed.total$trmt <- rep(c("grazed"),each = 496)
@@ -879,15 +845,9 @@ model.mammals.grazed.total$trophic_level <- rep(c("omnivore"),each = 496)
 
 #summary(mammals.grazed.pl)
 #model.mammals.grazed.pl <- multiple_breakups(mammals.grazed.pl)
-#pyramid_plot(model.mammals.grazed.pl, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-#wrongness_plot(model.mammals.grazed.pl)
-#broken_stick_plot(model.mammals.grazed.pl, window_length = 4, significance = 0.5)
 
 summary(mammals.grazed.pm)
 model.mammals.grazed.pm <- multiple_breakups(mammals.grazed.pm)
-pyramid_plot(model.mammals.grazed.pm, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.mammals.grazed.pm)
-broken_stick_plot(model.mammals.grazed.pm, window_length = 4, significance = 0.5)
 
 model.mammals.grazed.pm$site <- rep(c("konza"),each = 496)
 model.mammals.grazed.pm$trmt <- rep(c("grazed"),each = 496)
@@ -896,9 +856,6 @@ model.mammals.grazed.pm$trophic_level <- rep(c("omnivore"),each = 496)
 
 summary(mammals.ungrazed.total)
 model.mammals.ungrazed.total <- multiple_breakups(mammals.ungrazed.total)
-pyramid_plot(model.mammals.ungrazed.total, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.mammals.ungrazed.total)
-broken_stick_plot(model.mammals.ungrazed.total, window_length = 4, significance = 0.5)
 
 model.mammals.ungrazed.total$site <- rep(c("konza"),each = 496)
 model.mammals.ungrazed.total$trmt <- rep(c("ungrazed"),each = 496)
@@ -908,15 +865,9 @@ model.mammals.ungrazed.total$trophic_level <- rep(c("omnivore"),each = 496)
 #summary(mammals.ungrazed.pl)
 #colSums(mammals.ungrazed.pl) #I don't think there are enough individuals in the ungrazed treatment to use this species
 #model.mammals.ungrazed.pl <- multiple_breakups(mammals.ungrazed.pl)
-#pyramid_plot(model.mammals.ungrazed.pl, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-#wrongness_plot(model.mammals.ungrazed.pl)
-#broken_stick_plot(model.mammals.ungrazed.pl, window_length = 4, significance = 0.5)
 
 summary(mammals.ungrazed.pm)
 model.mammals.ungrazed.pm <- multiple_breakups(mammals.ungrazed.pm)
-pyramid_plot(model.mammals.ungrazed.pm, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.mammals.ungrazed.pm)
-broken_stick_plot(model.mammals.ungrazed.pm, window_length = 4, significance = 0.5)
 
 model.mammals.ungrazed.pm$site <- rep(c("konza"),each = 496)
 model.mammals.ungrazed.pm$trmt <- rep(c("ungrazed"),each = 496)
@@ -939,9 +890,6 @@ hub.litter.mass <- read.csv(file="cleaned_data/Hubbard_producer_litter_mass.csv"
 
 summary(hub.litter.mass)
 model.hub.litter.mass <- multiple_breakups(hub.litter.mass)
-pyramid_plot(model.hub.litter.mass, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hub.litter.mass)
-broken_stick_plot(model.hub.litter.mass, window_length = 4, significance = 0.5)
 
 model.hub.litter.mass$site <- rep(c("hbrook"),each = 351)
 model.hub.litter.mass$trmt <- rep(c("hardwood"),each = 351)
@@ -956,9 +904,6 @@ hub.leps.beech.individuals <- read.csv(file="cleaned_data/Hubbard_herbivore_beec
 
 summary(hub.leps.maple.biomass)
 model.hub.leps.maple.biomass <- multiple_breakups(hub.leps.maple.biomass)
-pyramid_plot(model.hub.leps.maple.biomass, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hub.leps.maple.biomass)
-broken_stick_plot(model.hub.leps.maple.biomass, window_length = 4, significance = 0.5)
 
 model.hub.leps.maple.biomass$site <- rep(c("hbrook"),each = 496)
 model.hub.leps.maple.biomass$trmt <- rep(c("hardwood"),each = 496)
@@ -967,9 +912,6 @@ model.hub.leps.maple.biomass$trophic_level <- rep(c("herbivore"),each = 496)
 
 summary(hub.leps.maple.individuals)
 model.hub.leps.maple.individuals <- multiple_breakups(hub.leps.maple.individuals)
-pyramid_plot(model.hub.leps.maple.individuals, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hub.leps.maple.individuals)
-broken_stick_plot(model.hub.leps.maple.individuals, window_length = 4, significance = 0.5)
 
 model.hub.leps.maple.individuals$site <- rep(c("hbrook"),each = 496)
 model.hub.leps.maple.individuals$trmt <- rep(c("hardwood"),each = 496)
@@ -978,9 +920,6 @@ model.hub.leps.maple.individuals$trophic_level <- rep(c("herbivore"),each = 496)
 
 summary(hub.leps.beech.biomass)
 model.hub.leps.beech.biomass <- multiple_breakups(hub.leps.beech.biomass)
-pyramid_plot(model.hub.leps.beech.biomass, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hub.leps.beech.biomass)
-broken_stick_plot(model.hub.leps.beech.biomass, window_length = 4, significance = 0.5)
 
 model.hub.leps.beech.biomass$site <- rep(c("hbrook"),each = 496)
 model.hub.leps.beech.biomass$trmt <- rep(c("hardwood"),each = 496)
@@ -989,9 +928,6 @@ model.hub.leps.beech.biomass$trophic_level <- rep(c("herbivore"),each = 496)
 
 summary(hub.leps.beech.individuals)
 model.hub.leps.beech.individuals <- multiple_breakups(hub.leps.beech.individuals)
-pyramid_plot(model.hub.leps.beech.individuals, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hub.leps.beech.individuals)
-broken_stick_plot(model.hub.leps.beech.individuals, window_length = 4, significance = 0.5)
 
 model.hub.leps.beech.individuals$site <- rep(c("hbrook"),each = 496)
 model.hub.leps.beech.individuals$trmt <- rep(c("hardwood"),each = 496)
@@ -1009,9 +945,6 @@ hub.birds.vireo <- read.csv(file="cleaned_data/Hubbard_omnivore_bird_vireo.csv")
 
 summary(hub.birds.total)
 model.hub.birds.total <- multiple_breakups(hub.birds.total)
-pyramid_plot(model.hub.birds.total, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hub.birds.total)
-broken_stick_plot(model.hub.birds.total, window_length = 4, significance = 0.5)
 
 model.hub.birds.total$site <- rep(c("hbrook"),each = 1035)
 model.hub.birds.total$trmt <- rep(c("hardwood"),each = 1035)
@@ -1020,9 +953,6 @@ model.hub.birds.total$trophic_level <- rep(c("omnivore"),each = 1035)
 
 summary(hub.birds.redstart)
 model.hub.birds.redstart <- multiple_breakups(hub.birds.redstart)
-pyramid_plot(model.hub.birds.redstart, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hub.birds.redstart)
-broken_stick_plot(model.hub.birds.redstart, window_length = 4, significance = 0.5)
 
 model.hub.birds.redstart$site <- rep(c("hbrook"),each = 1035)
 model.hub.birds.redstart$trmt <- rep(c("hardwood"),each = 1035)
@@ -1031,9 +961,6 @@ model.hub.birds.redstart$trophic_level <- rep(c("omnivore"),each = 1035)
 
 summary(hub.birds.vireo)
 model.hub.birds.vireo <- multiple_breakups(hub.birds.vireo)
-pyramid_plot(model.hub.birds.vireo, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
-wrongness_plot(model.hub.birds.vireo)
-broken_stick_plot(model.hub.birds.vireo, window_length = 4, significance = 0.5)
 
 model.hub.birds.vireo$site <- rep(c("hbrook"),each = 1035)
 model.hub.birds.vireo$trmt <- rep(c("hardwood"),each = 1035)
@@ -1055,24 +982,109 @@ write.csv(model.hbrook, file="model_output/model_hubbard_brook.csv", row.names=F
 ntl.lakeL.chlor <- read.csv(file="cleaned_data/NTL_producer_chlorA_lakeL.csv")
 ntl.lakeR.chlor <- read.csv(file="cleaned_data/NTL_producer_chlorA_lakeR.csv")
 
+summary(ntl.lakeL.chlor)
+model.ntl.lakeL.chlor <- multiple_breakups(ntl.lakeL.chlor)
+
+model.ntl.lakeL.chlor$site <- rep(c("ntlakes"),each = 253)
+model.ntl.lakeL.chlor$trmt <- rep(c("lake_L"),each = 253)
+model.ntl.lakeL.chlor$taxa <- rep(c("chlorophyll"),each = 253)
+model.ntl.lakeL.chlor$trophic_level <- rep(c("producer"),each = 253)
+
+summary(ntl.lakeR.chlor)
+model.ntl.lakeR.chlor <- multiple_breakups(ntl.lakeR.chlor)
+
+model.ntl.lakeR.chlor$site <- rep(c("ntlakes"),each = 253)
+model.ntl.lakeR.chlor$trmt <- rep(c("lake_R"),each = 253)
+model.ntl.lakeR.chlor$taxa <- rep(c("chlorophyll"),each = 253)
+model.ntl.lakeR.chlor$trophic_level <- rep(c("producer"),each = 253)
+
+#now merge all dataframes together
+model.chlor <- rbind(model.ntl.lakeL.chlor, model.ntl.lakeR.chlor)
+
 #Zooplankton
 ntl.lakeL.zoo.abund <- read.csv(file="cleaned_data/NTL_consumer_zoo_abund_lakeL.csv")
 ntl.lakeR.zoo.abund <- read.csv(file="cleaned_data/NTL_consumer_zoo_abund_lakeR.csv")
 ntl.lakeL.zoo.biomass <- read.csv(file="cleaned_data/NTL_consumer_zoo_biomass_lakeL.csv")
 ntl.lakeR.zoo.biomass <- read.csv(file="cleaned_data/NTL_consumer_zoo_biomass_lakeR.csv")
 
+summary(ntl.lakeL.zoo.abund)
+model.ntl.lakeL.zoo.abund <- multiple_breakups(ntl.lakeL.zoo.abund)
+
+model.ntl.lakeL.zoo.abund$site <- rep(c("ntlakes"),each = 253)
+model.ntl.lakeL.zoo.abund$trmt <- rep(c("lake_L"),each = 253)
+model.ntl.lakeL.zoo.abund$taxa <- rep(c("zooplankton_abundance"),each = 253)
+model.ntl.lakeL.zoo.abund$trophic_level <- rep(c("omnivore"),each = 253)
+
+
+
+
 #Fish
 ntl.lakeL.fish <- read.csv(file="cleaned_data/NTL_predator_fish_lakeL.csv")
 ntl.lakeR.fish <- read.csv(file="cleaned_data/NTL_predator_fish_lakeR.csv")
+
+summary(ntl.lakeL.fish)
+model.ntl.lakeL.fish <- multiple_breakups(ntl.lakeL.fish)
+
+model.ntl.lakeL.fish$site <- rep(c("ntlakes"),each = 84)
+model.ntl.lakeL.fish$trmt <- rep(c("lake_L"),each = 84)
+model.ntl.lakeL.fish$taxa <- rep(c("fish"),each = 84)
+model.ntl.lakeL.fish$trophic_level <- rep(c("predator"),each = 84)
+
+summary(ntl.lakeR.fish)
+model.ntl.lakeR.fish <- multiple_breakups(ntl.lakeR.fish)
+
+model.ntl.lakeR.fish$site <- rep(c("ntlakes"),each = 28)
+model.ntl.lakeR.fish$trmt <- rep(c("lake_R"),each = 28)
+model.ntl.lakeR.fish$taxa <- rep(c("fish"),each = 28)
+model.ntl.lakeR.fish$trophic_level <- rep(c("predator"),each = 28)
+
+#now merge all dataframes together
+model.ntl.fish <- rbind(model.ntl.lakeL.fish, model.ntl.lakeR.fish)
 
 
 ##Santa Barbara Coastal
 
 #Kelp,Algae
 sbc.carp.kelp <- read.csv(file="cleaned_data/SBC_producer_kelp_carp.csv")
-sbc.carp.algae <- read.csv(file="cleaned_data/SBC_producer_algae_carp.csv")
 sbc.napl.kelp <- read.csv(file="cleaned_data/SBC_producer_kelp_napl.csv")
+sbc.carp.algae <- read.csv(file="cleaned_data/SBC_producer_algae_carp.csv")
 sbc.napl.algae <- read.csv(file="cleaned_data/SBC_producer_algae_napl.csv")
+
+summary(sbc.carp.kelp)
+model.sbc.carp.kelp <- multiple_breakups(sbc.carp.kelp)
+
+model.sbc.carp.kelp$site <- rep(c("sbcoastal"),each = 190)
+model.sbc.carp.kelp$trmt <- rep(c("reef_carp"),each = 190)
+model.sbc.carp.kelp$taxa <- rep(c("kelp"),each = 190)
+model.sbc.carp.kelp$trophic_level <- rep(c("producer"),each = 190)
+
+summary(sbc.napl.kelp)
+model.sbc.napl.kelp <- multiple_breakups(sbc.napl.kelp)
+
+model.sbc.napl.kelp$site <- rep(c("sbcoastal"),each = 190)
+model.sbc.napl.kelp$trmt <- rep(c("reef_napl"),each = 190)
+model.sbc.napl.kelp$taxa <- rep(c("kelp"),each = 190)
+model.sbc.napl.kelp$trophic_level <- rep(c("producer"),each = 190)
+
+summary(sbc.carp.algae)
+model.sbc.carp.algae <- multiple_breakups(sbc.carp.algae)
+
+model.sbc.carp.algae$site <- rep(c("sbcoastal"),each = 190)
+model.sbc.carp.algae$trmt <- rep(c("reef_carp"),each = 190)
+model.sbc.carp.algae$taxa <- rep(c("algae"),each = 190)
+model.sbc.carp.algae$trophic_level <- rep(c("producer"),each = 190)
+
+summary(sbc.napl.algae)
+model.sbc.napl.algae <- multiple_breakups(sbc.napl.algae)
+
+model.sbc.napl.algae$site <- rep(c("sbcoastal"),each = 190)
+model.sbc.napl.algae$trmt <- rep(c("reef_napl"),each = 190)
+model.sbc.napl.algae$taxa <- rep(c("algae"),each = 190)
+model.sbc.napl.algae$trophic_level <- rep(c("producer"),each = 190)
+
+#now merge all dataframes together
+model.kelp.algae <- rbind(model.sbc.carp.kelp, model.sbc.napl.kelp,
+                          model.sbc.carp.algae, model.sbc.napl.algae)
 
 #Invertebrates
 sbc.carp.mob.invt <- read.csv(file="cleaned_data/SBC_consumer_minvert_carp.csv")
@@ -1080,9 +1092,67 @@ sbc.carp.ses.invt <- read.csv(file="cleaned_data/SBC_consumer_sinvert_carp.csv")
 sbc.napl.mob.invt <- read.csv( file="cleaned_data/SBC_consumer_minvert_napl.csv")
 sbc.napl.ses.invt <- read.csv(file="cleaned_data/SBC_consumer_sinvert_napl.csv")
 
+summary(sbc.carp.mob.invt)
+model.sbc.carp.mob.invt <- multiple_breakups(sbc.carp.mob.invt)
+
+model.sbc.carp.mob.invt$site <- rep(c("sbcoastal"),each = 190)
+model.sbc.carp.mob.invt$trmt <- rep(c("reef_carp"),each = 190)
+model.sbc.carp.mob.invt$taxa <- rep(c("invertebrate_mob"),each = 190)
+model.sbc.carp.mob.invt$trophic_level <- rep(c("consumer"),each = 190)
+
+summary(sbc.carp.ses.invt)
+model.sbc.carp.ses.invt <- multiple_breakups(sbc.carp.ses.invt)
+
+model.sbc.carp.ses.invt$site <- rep(c("sbcoastal"),each = 190)
+model.sbc.carp.ses.invt$trmt <- rep(c("reef_carp"),each = 190)
+model.sbc.carp.ses.invt$taxa <- rep(c("invertebrate_ses"),each = 190)
+model.sbc.carp.ses.invt$trophic_level <- rep(c("consumer"),each = 190)
+
+summary(sbc.napl.mob.invt)
+model.sbc.napl.mob.invt <- multiple_breakups(sbc.napl.mob.invt)
+
+model.sbc.napl.mob.invt$site <- rep(c("sbcoastal"),each = 190)
+model.sbc.napl.mob.invt$trmt <- rep(c("reef_napl"),each = 190)
+model.sbc.napl.mob.invt$taxa <- rep(c("invertebrate_mob"),each = 190)
+model.sbc.napl.mob.invt$trophic_level <- rep(c("consumer"),each = 190)
+
+summary(sbc.napl.ses.invt)
+model.sbc.napl.ses.invt <- multiple_breakups(sbc.napl.ses.invt)
+
+model.sbc.napl.ses.invt$site <- rep(c("sbcoastal"),each = 190)
+model.sbc.napl.ses.invt$trmt <- rep(c("reef_napl"),each = 190)
+model.sbc.napl.ses.invt$taxa <- rep(c("invertebrate_ses"),each = 190)
+model.sbc.napl.ses.invt$trophic_level <- rep(c("consumer"),each = 190)
+
+#now merge all dataframes together
+model.invt <- rbind(model.sbc.carp.mob.invt, model.sbc.carp.ses.invt,
+                    model.sbc.napl.mob.invt, model.sbc.napl.ses.invt)
+
 #Fish
 sbc.carp.fish <- read.csv(file="cleaned_data/SBC_predator_fish_carp.csv")
 sbc.napl.fish <- read.csv(file="cleaned_data/SBC_predator_fish_napl.csv")
 
+summary(sbc.carp.fish)
+model.sbc.carp.fish <- multiple_breakups(sbc.carp.fish)
+
+model.sbc.carp.fish$site <- rep(c("sbcoastal"),each = 190)
+model.sbc.carp.fish$trmt <- rep(c("reef_carp"),each = 190)
+model.sbc.carp.fish$taxa <- rep(c("fish"),each = 190)
+model.sbc.carp.fish$trophic_level <- rep(c("predator"),each = 190)
+
+summary(sbc.napl.fish)
+model.sbc.napl.fish <- multiple_breakups(sbc.napl.fish)
+
+model.sbc.napl.fish$site <- rep(c("sbcoastal"),each = 190)
+model.sbc.napl.fish$trmt <- rep(c("reef_napl"),each = 190)
+model.sbc.napl.fish$taxa <- rep(c("fish"),each = 190)
+model.sbc.napl.fish$trophic_level <- rep(c("predator"),each = 190)
+
+#now merge all dataframes together
+model.sbc.fish <- rbind(model.sbc.carp.fish, model.sbc.napl.fish)
+
+#now merge all santa barbara coastal dataframes together and save
+model.sbcoastal <- rbind(model.kelp.algae, model.invt, model.sbc.fish)
+write.csv(model.sbcoastal, file="model_output/model_santa_barbara_coastal.csv", row.names=FALSE)
 
 
