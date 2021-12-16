@@ -717,7 +717,7 @@ source_github <- function(u) {
   # read script lines from website
   script <- getURL(u, ssl.verifypeer = FALSE)
   
-  # parase lines and evaluate in the global environment
+  # parse lines and evaluate in the global environment
   eval(parse(text = script))
 }
 
@@ -927,7 +927,6 @@ model.mammals.ungrazed.pm$trophic_level <- rep(c("omnivore"),each = 496)
 model.mammals <- rbind(model.mammals.grazed.total, model.mammals.grazed.pm,
                        model.mammals.ungrazed.total, model.mammals.ungrazed.pm)
 
-
 #now merge all konza dataframes together and save
 model.konza <- rbind(model.grassmass, model.hoppers, model.mammals)
 write.csv(model.konza, file="model_output/model_konza.csv", row.names=FALSE)
@@ -938,16 +937,116 @@ write.csv(model.konza, file="model_output/model_konza.csv", row.names=FALSE)
 #Litter
 hub.litter.mass <- read.csv(file="cleaned_data/Hubbard_producer_litter_mass.csv")
 
+summary(hub.litter.mass)
+model.hub.litter.mass <- multiple_breakups(hub.litter.mass)
+pyramid_plot(model.hub.litter.mass, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hub.litter.mass)
+broken_stick_plot(model.hub.litter.mass, window_length = 4, significance = 0.5)
+
+model.hub.litter.mass$site <- rep(c("hbrook"),each = 351)
+model.hub.litter.mass$trmt <- rep(c("hardwood"),each = 351)
+model.hub.litter.mass$taxa <- rep(c("tree"),each = 351)
+model.hub.litter.mass$trophic_level <- rep(c("producer"),each = 351)
+
 #Lepidoptera
 hub.leps.maple.biomass <- read.csv(file="cleaned_data/Hubbard_herbivore_maple_biomass.csv")
 hub.leps.maple.individuals <- read.csv(file="cleaned_data/Hubbard_herbivore_maple_abundance.csv")
 hub.leps.beech.biomass <- read.csv(file="cleaned_data/Hubbard_herbivore_beech_biomass.csv")
 hub.leps.beech.individuals <- read.csv(file="cleaned_data/Hubbard_herbivore_beech_abundance.csv")
 
+summary(hub.leps.maple.biomass)
+model.hub.leps.maple.biomass <- multiple_breakups(hub.leps.maple.biomass)
+pyramid_plot(model.hub.leps.maple.biomass, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hub.leps.maple.biomass)
+broken_stick_plot(model.hub.leps.maple.biomass, window_length = 4, significance = 0.5)
+
+model.hub.leps.maple.biomass$site <- rep(c("hbrook"),each = 496)
+model.hub.leps.maple.biomass$trmt <- rep(c("hardwood"),each = 496)
+model.hub.leps.maple.biomass$taxa <- rep(c("lep_biomass_maple"),each = 496)
+model.hub.leps.maple.biomass$trophic_level <- rep(c("herbivore"),each = 496)
+
+summary(hub.leps.maple.individuals)
+model.hub.leps.maple.individuals <- multiple_breakups(hub.leps.maple.individuals)
+pyramid_plot(model.hub.leps.maple.individuals, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hub.leps.maple.individuals)
+broken_stick_plot(model.hub.leps.maple.individuals, window_length = 4, significance = 0.5)
+
+model.hub.leps.maple.individuals$site <- rep(c("hbrook"),each = 496)
+model.hub.leps.maple.individuals$trmt <- rep(c("hardwood"),each = 496)
+model.hub.leps.maple.individuals$taxa <- rep(c("lep_abundance_maple"),each = 496)
+model.hub.leps.maple.individuals$trophic_level <- rep(c("herbivore"),each = 496)
+
+summary(hub.leps.beech.biomass)
+model.hub.leps.beech.biomass <- multiple_breakups(hub.leps.beech.biomass)
+pyramid_plot(model.hub.leps.beech.biomass, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hub.leps.beech.biomass)
+broken_stick_plot(model.hub.leps.beech.biomass, window_length = 4, significance = 0.5)
+
+model.hub.leps.beech.biomass$site <- rep(c("hbrook"),each = 496)
+model.hub.leps.beech.biomass$trmt <- rep(c("hardwood"),each = 496)
+model.hub.leps.beech.biomass$taxa <- rep(c("lep_biomass_beech"),each = 496)
+model.hub.leps.beech.biomass$trophic_level <- rep(c("herbivore"),each = 496)
+
+summary(hub.leps.beech.individuals)
+model.hub.leps.beech.individuals <- multiple_breakups(hub.leps.beech.individuals)
+pyramid_plot(model.hub.leps.beech.individuals, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hub.leps.beech.individuals)
+broken_stick_plot(model.hub.leps.beech.individuals, window_length = 4, significance = 0.5)
+
+model.hub.leps.beech.individuals$site <- rep(c("hbrook"),each = 496)
+model.hub.leps.beech.individuals$trmt <- rep(c("hardwood"),each = 496)
+model.hub.leps.beech.individuals$taxa <- rep(c("lep_abundance_beech"),each = 496)
+model.hub.leps.beech.individuals$trophic_level <- rep(c("herbivore"),each = 496)
+
+#now merge all dataframes together
+model.leps <- rbind(model.hub.leps.maple.biomass, model.hub.leps.maple.individuals,
+                    model.hub.leps.beech.biomass, model.hub.leps.beech.individuals)
+
 #Birds
 hub.birds.total <- read.csv(file="cleaned_data/Hubbard_omnivore_bird_total.csv")
 hub.birds.redstart <- read.csv(file="cleaned_data/Hubbard_omnivore_bird_redstart.csv")
 hub.birds.vireo <- read.csv(file="cleaned_data/Hubbard_omnivore_bird_vireo.csv")
+
+summary(hub.birds.total)
+model.hub.birds.total <- multiple_breakups(hub.birds.total)
+pyramid_plot(model.hub.birds.total, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hub.birds.total)
+broken_stick_plot(model.hub.birds.total, window_length = 4, significance = 0.5)
+
+model.hub.birds.total$site <- rep(c("hbrook"),each = 1035)
+model.hub.birds.total$trmt <- rep(c("hardwood"),each = 1035)
+model.hub.birds.total$taxa <- rep(c("bird_total"),each = 1035)
+model.hub.birds.total$trophic_level <- rep(c("omnivore"),each = 1035)
+
+summary(hub.birds.redstart)
+model.hub.birds.redstart <- multiple_breakups(hub.birds.redstart)
+pyramid_plot(model.hub.birds.redstart, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hub.birds.redstart)
+broken_stick_plot(model.hub.birds.redstart, window_length = 4, significance = 0.5)
+
+model.hub.birds.redstart$site <- rep(c("hbrook"),each = 1035)
+model.hub.birds.redstart$trmt <- rep(c("hardwood"),each = 1035)
+model.hub.birds.redstart$taxa <- rep(c("bird_redstart"),each = 1035)
+model.hub.birds.redstart$trophic_level <- rep(c("omnivore"),each = 1035)
+
+summary(hub.birds.vireo)
+model.hub.birds.vireo <- multiple_breakups(hub.birds.vireo)
+pyramid_plot(model.hub.birds.vireo, plot_insig = TRUE, significance=0.05, rsq_points =TRUE)
+wrongness_plot(model.hub.birds.vireo)
+broken_stick_plot(model.hub.birds.vireo, window_length = 4, significance = 0.5)
+
+model.hub.birds.vireo$site <- rep(c("hbrook"),each = 1035)
+model.hub.birds.vireo$trmt <- rep(c("hardwood"),each = 1035)
+model.hub.birds.vireo$taxa <- rep(c("bird_vireo"),each = 1035)
+model.hub.birds.vireo$trophic_level <- rep(c("omnivore"),each = 1035)
+
+#now merge all dataframes together
+model.birds <- rbind(model.hub.birds.total, model.hub.birds.redstart,
+                     model.hub.birds.vireo)
+
+#now merge all hubbard brook dataframes together and save
+model.hbrook <- rbind(model.hub.litter.mass, model.leps, model.birds)
+write.csv(model.hbrook, file="model_output/model_hubbard_brook.csv", row.names=FALSE)
 
 
 ##North Temperate Lakes
