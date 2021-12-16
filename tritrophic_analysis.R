@@ -580,12 +580,27 @@ summary.ntl.zoo$daynum <- NULL
 ntl.lakeL.zoo <- summary.ntl.zoo[which(summary.ntl.zoo$lakeid=="L"),]
 ntl.lakeR.zoo <- summary.ntl.zoo[which(summary.ntl.zoo$lakeid=="R"),]
 
-#and then snip it into abundance and biomass
+#looks like series is complete through 1995, so need to remove years 1996 and later
+ntl.lakeL.zoo <- ntl.lakeL.zoo[which(ntl.lakeL.zoo$year4<1996),]
+ntl.lakeR.zoo <- ntl.lakeR.zoo[which(ntl.lakeR.zoo$year4<1996),]
 
+#and then snip it into abundance and biomass
 ntl.lakeL.zoo.abund <- ntl.lakeL.zoo[c(2,3)]
 ntl.lakeL.zoo.biomass <- ntl.lakeL.zoo[c(2,4)]
 ntl.lakeR.zoo.abund <- ntl.lakeR.zoo[c(2,3)]
 ntl.lakeR.zoo.biomass <- ntl.lakeR.zoo[c(2,4)]
+
+#check to see if we have missing data
+summary(ntl.lakeL.zoo.abund)
+summary(ntl.lakeL.zoo.biomass)
+summary(ntl.lakeR.zoo.abund)
+summary(ntl.lakeR.zoo.biomass)
+
+#missing biomass data for some reps in each lake, let's remove those
+ntl.lakeL.zoo.biomass <- ntl.lakeL.zoo.biomass[complete.cases(ntl.lakeL.zoo.biomass),]
+summary(ntl.lakeL.zoo.biomass)
+ntl.lakeR.zoo.biomass <- ntl.lakeR.zoo.biomass[complete.cases(ntl.lakeR.zoo.biomass),]
+summary(ntl.lakeR.zoo.biomass)
 
 #and write it:
 
@@ -1010,12 +1025,38 @@ ntl.lakeR.zoo.biomass <- read.csv(file="cleaned_data/NTL_consumer_zoo_biomass_la
 summary(ntl.lakeL.zoo.abund)
 model.ntl.lakeL.zoo.abund <- multiple_breakups(ntl.lakeL.zoo.abund)
 
-model.ntl.lakeL.zoo.abund$site <- rep(c("ntlakes"),each = 253)
-model.ntl.lakeL.zoo.abund$trmt <- rep(c("lake_L"),each = 253)
-model.ntl.lakeL.zoo.abund$taxa <- rep(c("zooplankton_abundance"),each = 253)
-model.ntl.lakeL.zoo.abund$trophic_level <- rep(c("omnivore"),each = 253)
+model.ntl.lakeL.zoo.abund$site <- rep(c("ntlakes"),each = 55)
+model.ntl.lakeL.zoo.abund$trmt <- rep(c("lake_L"),each = 55)
+model.ntl.lakeL.zoo.abund$taxa <- rep(c("zooplankton_abundance"),each = 55)
+model.ntl.lakeL.zoo.abund$trophic_level <- rep(c("consumer"),each = 55)
 
+summary(ntl.lakeR.zoo.abund)
+model.ntl.lakeR.zoo.abund <- multiple_breakups(ntl.lakeR.zoo.abund)
 
+model.ntl.lakeR.zoo.abund$site <- rep(c("ntlakes"),each = 55)
+model.ntl.lakeR.zoo.abund$trmt <- rep(c("lake_R"),each = 55)
+model.ntl.lakeR.zoo.abund$taxa <- rep(c("zooplankton_abundance"),each = 55)
+model.ntl.lakeR.zoo.abund$trophic_level <- rep(c("consumer"),each = 55)
+
+summary(ntl.lakeL.zoo.biomass)
+model.ntl.lakeL.zoo.biomass <- multiple_breakups(ntl.lakeL.zoo.biomass)
+
+model.ntl.lakeL.zoo.biomass$site <- rep(c("ntlakes"),each = 55)
+model.ntl.lakeL.zoo.biomass$trmt <- rep(c("lake_L"),each = 55)
+model.ntl.lakeL.zoo.biomass$taxa <- rep(c("zooplankton_biomass"),each = 55)
+model.ntl.lakeL.zoo.biomass$trophic_level <- rep(c("consumer"),each = 55)
+
+summary(ntl.lakeR.zoo.biomass)
+model.ntl.lakeR.zoo.biomass <- multiple_breakups(ntl.lakeR.zoo.biomass)
+
+model.ntl.lakeR.zoo.biomass$site <- rep(c("ntlakes"),each = 55)
+model.ntl.lakeR.zoo.biomass$trmt <- rep(c("lake_R"),each = 55)
+model.ntl.lakeR.zoo.biomass$taxa <- rep(c("zooplankton_biomass"),each = 55)
+model.ntl.lakeR.zoo.biomass$trophic_level <- rep(c("consumer"),each = 55)
+
+#now merge all dataframes together
+model.zoo <- rbind(model.ntl.lakeL.zoo.abund, model.ntl.lakeL.zoo.biomass,
+                   model.ntl.lakeR.zoo.abund, model.ntl.lakeR.zoo.biomass)
 
 
 #Fish
@@ -1040,6 +1081,10 @@ model.ntl.lakeR.fish$trophic_level <- rep(c("predator"),each = 28)
 
 #now merge all dataframes together
 model.ntl.fish <- rbind(model.ntl.lakeL.fish, model.ntl.lakeR.fish)
+
+#now merge all north temperate lakes dataframes together and save
+model.ntlakes <- rbind(model.chlor, model.zoo, model.ntl.fish)
+write.csv(model.ntlakes, file="model_output/model_north_temperate_lakes.csv", row.names=FALSE)
 
 
 ##Santa Barbara Coastal
