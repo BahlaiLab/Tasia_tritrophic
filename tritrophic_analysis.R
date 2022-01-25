@@ -1210,4 +1210,32 @@ model.lter <- rbind(model.konza, model.hbrook, model.ntlakes, model.sbcoastal)
 write.csv(model.lter, file="model_output/model_all_LTER_sites.csv", row.names=FALSE)
 
 
+#####################################
+# Exploratory analysis of model outputs for LTER sites
+
+# import the data
+mod.lter <- read.csv(file="model_output/model_all_LTER_sites.csv")
+
+
+boxplot(slope ~ trophic_level, data = mod.lter)
+boxplot(p_value ~ trophic_level, data = mod.lter)
+boxplot(slope_se ~ trophic_level, data = mod.lter)
+boxplot(r_square ~ trophic_level, data = mod.lter)
+boxplot(adj_r_square ~ trophic_level, data = mod.lter)
+
+library(ggplot2)
+
+ggplot(mod.lter, aes(start_year, slope, colour = trophic_level)) + geom_point() + theme_bw()
+ggplot(mod.lter, aes(start_year, slope_se, colour = trophic_level)) + geom_point() + theme_bw()
+ggplot(mod.lter, aes(start_year, p_value, colour = trophic_level)) + geom_point() + theme_bw()
+ggplot(mod.lter, aes(start_year, r_square, colour = trophic_level)) + geom_point() + theme_bw()
+ggplot(mod.lter, aes(start_year, adj_r_square, colour = trophic_level)) + geom_point() + theme_bw()
+
+ggplot(mod.lter, aes(N_years, slope, colour = trophic_level)) + geom_point() + theme_bw()
+ggplot(mod.lter, aes(N_years, slope_se, colour = trophic_level)) + geom_point() + theme_bw()
+ggplot(mod.lter, aes(N_years, p_value, colour = trophic_level)) + geom_point() + theme_bw()
+ggplot(mod.lter, aes(N_years, r_square, colour = trophic_level)) + geom_point() + theme_bw()
+ggplot(mod.lter, aes(N_years, adj_r_square, colour = trophic_level)) + geom_point() + theme_bw()
+
+
 
