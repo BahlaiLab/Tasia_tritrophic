@@ -1,12 +1,11 @@
 #####################################
 # Exploratory analysis of model outputs for LTER sites
 
-# import the data
-mod.lter <- read.csv(file="model_output/model_all_LTER_sites.csv")
-
 library(ggplot2)
 library(lattice)
 
+# import the data
+mod.lter <- read.csv(file="model_output/model_all_LTER_sites.csv")
 
 boxplot(slope ~ trophic_level, data = mod.lter)
 boxplot(p_value ~ trophic_level, data = mod.lter)
@@ -25,6 +24,27 @@ ggplot(mod.lter, aes(N_years, slope_se, colour = trophic_level)) + geom_point() 
 ggplot(mod.lter, aes(N_years, p_value, colour = trophic_level)) + geom_point() + theme_bw()
 ggplot(mod.lter, aes(N_years, r_square, colour = trophic_level)) + geom_point() + theme_bw()
 ggplot(mod.lter, aes(N_years, adj_r_square, colour = trophic_level)) + geom_point() + theme_bw()
+
+options(scipen = 999)
+mod.lter$p_value <- round(mod.lter$p_value, digits = 10)
+mod.lter$intercept_p_value <- round(mod.lter$intercept_p_value, digits = 10)
+
+str(mod.lter)
+mod.lter$trophic_level <- as.factor(mod.lter$trophic_level)
+levels(mod.lter$trophic_level)
+mod.lter$trophic_level <- factor(mod.lter$trophic_level,
+                                 levels = c("producer", "herbivore", "consumer", "omnivore", "predator"))
+levels(mod.lter$trophic_level)
+mod.lter$N_years <- as.numeric(mod.lter$N_years)
+
+png("figures/LTER_SITES.png", width = 2000, height = 600, pointsize = 20)
+xyplot(mod.lter$N_years ~ mod.lter$slope | mod.lter$trophic_level,
+       col = ifelse(mod.lter$p_value < 0.05,'red','black'),
+       pch = 19, cex = 1,
+       strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
+       xlab = "Slope", ylab = "Number of years",
+       abline=c(v=0, lwd = 3))
+dev.off()
 
 
 ## Konza Prairie
