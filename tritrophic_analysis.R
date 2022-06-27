@@ -856,7 +856,7 @@ model.mammals.grazed.total <- multiple_breakups(mammals.grazed.total)
 model.mammals.grazed.total$site <- rep(c("konza"),each = 496)
 model.mammals.grazed.total$trmt <- rep(c("grazed"),each = 496)
 model.mammals.grazed.total$taxa <- rep(c("mammals_total"),each = 496)
-model.mammals.grazed.total$trophic_level <- rep(c("omnivore"),each = 496)
+model.mammals.grazed.total$trophic_level <- rep(c("consumer"),each = 496)
 
 #summary(mammals.grazed.pl)
 #model.mammals.grazed.pl <- multiple_breakups(mammals.grazed.pl)
@@ -867,7 +867,7 @@ model.mammals.grazed.pm <- multiple_breakups(mammals.grazed.pm)
 model.mammals.grazed.pm$site <- rep(c("konza"),each = 496)
 model.mammals.grazed.pm$trmt <- rep(c("grazed"),each = 496)
 model.mammals.grazed.pm$taxa <- rep(c("mammals_pm"),each = 496)
-model.mammals.grazed.pm$trophic_level <- rep(c("omnivore"),each = 496)
+model.mammals.grazed.pm$trophic_level <- rep(c("consumer"),each = 496)
 
 summary(mammals.ungrazed.total)
 model.mammals.ungrazed.total <- multiple_breakups(mammals.ungrazed.total)
@@ -875,7 +875,7 @@ model.mammals.ungrazed.total <- multiple_breakups(mammals.ungrazed.total)
 model.mammals.ungrazed.total$site <- rep(c("konza"),each = 496)
 model.mammals.ungrazed.total$trmt <- rep(c("ungrazed"),each = 496)
 model.mammals.ungrazed.total$taxa <- rep(c("mammals_total"),each = 496)
-model.mammals.ungrazed.total$trophic_level <- rep(c("omnivore"),each = 496)
+model.mammals.ungrazed.total$trophic_level <- rep(c("consumer"),each = 496)
 
 #summary(mammals.ungrazed.pl)
 #colSums(mammals.ungrazed.pl) #I don't think there are enough individuals in the ungrazed treatment to use this species
@@ -887,7 +887,7 @@ model.mammals.ungrazed.pm <- multiple_breakups(mammals.ungrazed.pm)
 model.mammals.ungrazed.pm$site <- rep(c("konza"),each = 496)
 model.mammals.ungrazed.pm$trmt <- rep(c("ungrazed"),each = 496)
 model.mammals.ungrazed.pm$taxa <- rep(c("mammals_pm"),each = 496)
-model.mammals.ungrazed.pm$trophic_level <- rep(c("omnivore"),each = 496)
+model.mammals.ungrazed.pm$trophic_level <- rep(c("consumer"),each = 496)
 
 #now merge all dataframes together
 model.mammals <- rbind(model.mammals.grazed.total, model.mammals.grazed.pm,
@@ -964,7 +964,7 @@ model.hub.birds.total <- multiple_breakups(hub.birds.total)
 model.hub.birds.total$site <- rep(c("hbrook"),each = 1035)
 model.hub.birds.total$trmt <- rep(c("hardwood"),each = 1035)
 model.hub.birds.total$taxa <- rep(c("bird_total"),each = 1035)
-model.hub.birds.total$trophic_level <- rep(c("omnivore"),each = 1035)
+model.hub.birds.total$trophic_level <- rep(c("consumer"),each = 1035)
 
 summary(hub.birds.redstart)
 model.hub.birds.redstart <- multiple_breakups(hub.birds.redstart)
@@ -972,7 +972,7 @@ model.hub.birds.redstart <- multiple_breakups(hub.birds.redstart)
 model.hub.birds.redstart$site <- rep(c("hbrook"),each = 1035)
 model.hub.birds.redstart$trmt <- rep(c("hardwood"),each = 1035)
 model.hub.birds.redstart$taxa <- rep(c("bird_redstart"),each = 1035)
-model.hub.birds.redstart$trophic_level <- rep(c("omnivore"),each = 1035)
+model.hub.birds.redstart$trophic_level <- rep(c("consumer"),each = 1035)
 
 summary(hub.birds.vireo)
 model.hub.birds.vireo <- multiple_breakups(hub.birds.vireo)
@@ -980,7 +980,7 @@ model.hub.birds.vireo <- multiple_breakups(hub.birds.vireo)
 model.hub.birds.vireo$site <- rep(c("hbrook"),each = 1035)
 model.hub.birds.vireo$trmt <- rep(c("hardwood"),each = 1035)
 model.hub.birds.vireo$taxa <- rep(c("bird_vireo"),each = 1035)
-model.hub.birds.vireo$trophic_level <- rep(c("omnivore"),each = 1035)
+model.hub.birds.vireo$trophic_level <- rep(c("consumer"),each = 1035)
 
 #now merge all dataframes together
 model.birds <- rbind(model.hub.birds.total, model.hub.birds.redstart,

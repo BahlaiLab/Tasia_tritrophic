@@ -40,7 +40,7 @@ mod.lter$start_year <- as.numeric(mod.lter$start_year)
 
 png("figures/LTER_SITES.png", width = 2000, height = 600, pointsize = 20)
 xyplot(mod.lter$N_years ~ mod.lter$slope | mod.lter$trophic_level,
-       col = ifelse(mod.lter$p_value < 0.05,'red','black'),
+       col = ifelse(mod.lter$p_value <= 0.05,'red','black'),
        pch = 19, cex = 1,
        strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
        xlab = "Slope", ylab = "Number of years",
@@ -84,6 +84,7 @@ xyplot(mod.konza$slope ~ mod.konza$start_year | mod.konza$trophic_level,
        strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
        xlab = "Start Year", ylab = "Slope", abline=c(h=0, lwd = 3))
 
+ggplot(mod.konza, aes(N_years, slope, colour = trophic_level)) + geom_point() + theme_classic()
 ggplot(mod.konza, aes(N_years, slope_se, colour = trophic_level)) + geom_point() + theme_classic()
 ggplot(mod.konza, aes(N_years, p_value, colour = trophic_level)) + geom_point() + theme_bw()
 ggplot(mod.konza, aes(N_years, r_square, colour = trophic_level)) + geom_point() + theme_bw()
