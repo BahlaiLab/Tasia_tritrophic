@@ -35,9 +35,8 @@ mod.lter$intercept_p_value <- round(mod.lter$intercept_p_value, digits = 10)
 str(mod.lter)
 mod.lter$trophic_level <- as.factor(mod.lter$trophic_level)
 levels(mod.lter$trophic_level)
-mod.lter$trophic_level <- factor(mod.lter$trophic_level,
-                                 levels = c("producer", "herbivore", "consumer", "predator"))
-levels(mod.lter$trophic_level)
+#mod.lter$trophic_level <- factor(mod.lter$trophic_level,
+#                                 levels = c("producer", "herbivore", "consumer", "predator"))
 mod.lter$N_years <- as.numeric(mod.lter$N_years)
 mod.lter$start_year <- as.numeric(mod.lter$start_year)
 
@@ -66,8 +65,6 @@ cols <- c("black", "red")
 
 str(mod.konza)
 mod.konza$trophic_level <- as.factor(mod.konza$trophic_level)
-levels(mod.konza$trophic_level)
-mod.konza$trophic_level <- factor(mod.konza$trophic_level, levels = c("producer", "herbivore", "consumer"))
 levels(mod.konza$trophic_level)
 mod.konza$N_years <- as.numeric(mod.konza$N_years)
 mod.konza$start_year <- as.numeric(mod.konza$start_year)
@@ -103,8 +100,6 @@ mod.hbrook$intercept_p_value <- round(mod.hbrook$intercept_p_value, digits = 10)
 str(mod.hbrook)
 mod.hbrook$trophic_level <- as.factor(mod.hbrook$trophic_level)
 levels(mod.hbrook$trophic_level)
-mod.hbrook$trophic_level <- factor(mod.hbrook$trophic_level, levels = c("producer", "herbivore", "consumer"))
-levels(mod.hbrook$trophic_level)
 mod.hbrook$N_years <- as.numeric(mod.hbrook$N_years)
 mod.hbrook$start_year <- as.numeric(mod.hbrook$start_year)
 
@@ -133,8 +128,6 @@ mod.ntlakes$intercept_p_value <- round(mod.ntlakes$intercept_p_value, digits = 1
 str(mod.ntlakes)
 mod.ntlakes$trophic_level <- as.factor(mod.ntlakes$trophic_level)
 levels(mod.ntlakes$trophic_level)
-mod.ntlakes$trophic_level <- factor(mod.ntlakes$trophic_level, levels = c("producer", "consumer", "predator"))
-levels(mod.ntlakes$trophic_level)
 mod.ntlakes$N_years <- as.numeric(mod.ntlakes$N_years)
 mod.ntlakes$start_year <- as.numeric(mod.ntlakes$start_year)
 
@@ -162,8 +155,6 @@ mod.sbcoastal$intercept_p_value <- round(mod.sbcoastal$intercept_p_value, digits
 
 str(mod.sbcoastal)
 mod.sbcoastal$trophic_level <- as.factor(mod.sbcoastal$trophic_level)
-levels(mod.sbcoastal$trophic_level)
-mod.sbcoastal$trophic_level <- factor(mod.sbcoastal$trophic_level, levels = c("producer", "consumer", "predator"))
 levels(mod.sbcoastal$trophic_level)
 mod.sbcoastal$N_years <- as.numeric(mod.sbcoastal$N_years)
 mod.sbcoastal$start_year <- as.numeric(mod.sbcoastal$start_year)
