@@ -620,8 +620,6 @@ ntl.fish <- read.csv(file="https://pasta.lternet.edu/package/data/eml/knb-lter-n
 
 summary(ntl.fish)
 
-# it's a bit inelegant and reductive, but let's just use biomass and abundance (number_per_net) as our response variables- totals per day per lake
-#for lakes R and L
 
 ntl.fish1 <- ntl.fish[which(ntl.fish$lakename=="PETER"|ntl.fish$lakename=="PAUL"),]
 
@@ -685,7 +683,7 @@ summary.sbc1$MONTH <- NULL
 summary.sbc1$TRANSECT <- NULL
 
 
-#divide it out by lake ID
+#divide it out by site ID
 sbc.carp <- summary.sbc1[which(summary.sbc1$SITE=="CARP"),]
 sbc.napl <- summary.sbc1[which(summary.sbc1$SITE=="NAPL"),]
 
