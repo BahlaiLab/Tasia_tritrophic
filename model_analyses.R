@@ -40,20 +40,19 @@ levels(mod.lter$trophic_level)
 mod.lter$N_years <- as.numeric(mod.lter$N_years)
 mod.lter$start_year <- as.numeric(mod.lter$start_year)
 
+stripParams <- list(cex=2, lines=1.5)
+
 png("figures/LTER_SITES.png", width = 2000, height = 600, pointsize = 20)
 xyplot(mod.lter$N_years ~ mod.lter$slope | mod.lter$trophic_level,
+       par.strip.text = stripParams,
+       par.settings = list(strip.background = list(col = "lightgray")),
        col = ifelse(mod.lter$p_value <= 0.05,'red','black'),
-       pch = 19, cex = 1,
-       strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
-       xlab = "Slope", ylab = "Number of years",
+       pch = 19, cex = 1.2,
+       xlab = list(label = "Slope", cex = 2.2),
+       ylab = list(label = "Number of years", cex = 2.2),
+       scales=list(cex = 1.5),
        abline=c(v=0, lwd = 3))
 dev.off()
-
-xyplot(mod.lter$slope ~mod.lter$start_year | mod.lter$trophic_level,
-       col = ifelse(mod.lter$p_value < 0.05,'red','black'),
-       pch = 19, cex = 1,
-       strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
-       xlab = "Start Year", ylab = "Slope")
 
 
 ## Konza Prairie
@@ -61,7 +60,6 @@ mod.konza <- read.csv(file="model_output/model_konza.csv")
 options(scipen = 999)
 mod.konza$p_value <- round(mod.konza$p_value, digits = 10)
 mod.konza$intercept_p_value <- round(mod.konza$intercept_p_value, digits = 10)
-cols <- c("black", "red")
 
 str(mod.konza)
 mod.konza$trophic_level <- as.factor(mod.konza$trophic_level)
@@ -71,18 +69,15 @@ mod.konza$start_year <- as.numeric(mod.konza$start_year)
 
 png("figures/Konza_Prairie.png", width = 1600, height = 600, pointsize = 20)
 xyplot(mod.konza$N_years ~ mod.konza$slope | mod.konza$trophic_level,
-       col = ifelse(mod.konza$p_value < 0.05,'red','black'),
-       pch = 19, cex = 1,
-       strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
-       xlab = "Slope", ylab = "Number of years",
+       par.strip.text = stripParams,
+       par.settings = list(strip.background = list(col = "lightgray")),
+       col = ifelse(mod.konza$p_value <= 0.05,'red','black'),
+       pch = 19, cex = 1.2,
+       xlab = list(label = "Slope", cex = 2.2),
+       ylab = list(label = "Number of years", cex = 2.2),
+       scales=list(cex = 1.8),
        abline=c(v=0, lwd = 3))
 dev.off()
-
-xyplot(mod.konza$slope ~ mod.konza$start_year | mod.konza$trophic_level,
-       col = ifelse(mod.konza$p_value < 0.05,'red','black'),
-       pch = 19, cex = 1,
-       strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
-       xlab = "Start Year", ylab = "Slope", abline=c(h=0, lwd = 3))
 
 ggplot(mod.konza, aes(N_years, slope, colour = trophic_level)) + geom_point() + theme_classic()
 ggplot(mod.konza, aes(N_years, slope_se, colour = trophic_level)) + geom_point() + theme_classic()
@@ -105,19 +100,15 @@ mod.hbrook$start_year <- as.numeric(mod.hbrook$start_year)
 
 png("figures/Hubbard_Brook.png", width = 1600, height = 600, pointsize = 20)
 xyplot(mod.hbrook$N_years ~ mod.hbrook$slope | mod.hbrook$trophic_level,
-       col = ifelse(mod.hbrook$p_value < 0.05,'red','black'),
-       pch = 19, cex = 1,
-       strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
-       xlab = "Slope", ylab = "Number of years",
+       par.strip.text = stripParams,
+       par.settings = list(strip.background = list(col = "lightgray")),
+       col = ifelse(mod.hbrook$p_value <= 0.05,'red','black'),
+       pch = 19, cex = 1.2,
+       xlab = list(label = "Slope", cex = 2.2),
+       ylab = list(label = "Number of years", cex = 2.2),
+       scales=list(cex = 1.5),
        abline=c(v=0, lwd = 3))
 dev.off()
-
-xyplot(mod.hbrook$slope ~ mod.hbrook$start_year | mod.hbrook$trophic_level,
-       col = ifelse(mod.hbrook$p_value < 0.05,'red','black'),
-       pch = 19, cex = 1,
-       strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
-       xlab = "Start Year", ylab = "Slope", abline=c(h=0, lwd = 3))
-
 
 ## North Temperate Lakes
 mod.ntlakes <- read.csv(file="model_output/model_north_temperate_lakes.csv")
@@ -133,21 +124,18 @@ mod.ntlakes$start_year <- as.numeric(mod.ntlakes$start_year)
 
 png("figures/North_Temperate_Lakes.png", width = 1600, height = 600, pointsize = 20)
 xyplot(mod.ntlakes$N_years ~ mod.ntlakes$slope | mod.ntlakes$trophic_level,
-       col = ifelse(mod.ntlakes$p_value < 0.05,'red','black'),
-       pch = 19, cex = 1,
-       strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
-       xlab = "Slope", ylab = "Number of years",
+       par.strip.text = stripParams,
+       par.settings = list(strip.background = list(col = "lightgray")),
+       col = ifelse(mod.ntlakes$p_value <= 0.05,'red','black'),
+       pch = 19, cex = 1.2,
+       xlab = list(label = "Slope", cex = 2.2),
+       ylab = list(label = "Number of years", cex = 2.2),
+       scales=list(cex = 1.5),
        abline=c(v=0, lwd = 3))
 dev.off()
 
-xyplot(mod.ntlakes$slope ~ mod.ntlakes$start_year | mod.ntlakes$trophic_level,
-       col = ifelse(mod.ntlakes$p_value < 0.05,'red','black'),
-       pch = 19, cex = 1,
-       strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
-       xlab = "Start Year", ylab = "Slope", abline=c(h=0, lwd = 3))
 
-
-## North Temperate Lakes
+## Santa Barbara Coastal
 mod.sbcoastal <- read.csv(file="model_output/model_santa_barbara_coastal.csv")
 options(scipen = 999)
 mod.sbcoastal$p_value <- round(mod.sbcoastal$p_value, digits = 10)
@@ -161,16 +149,13 @@ mod.sbcoastal$start_year <- as.numeric(mod.sbcoastal$start_year)
 
 png("figures/Santa_Barbara_Coastal.png", width = 1600, height = 600, pointsize = 20)
 xyplot(mod.sbcoastal$N_years ~ mod.sbcoastal$slope | mod.sbcoastal$trophic_level,
-       col = ifelse(mod.sbcoastal$p_value < 0.05,'red','black'),
-       pch = 19, cex = 1,
-       strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
-       xlab = "Slope", ylab = "Number of years",
+       par.strip.text = stripParams,
+       par.settings = list(strip.background = list(col = "lightgray")),
+       col = ifelse(mod.sbcoastal$p_value <= 0.05,'red','black'),
+       pch = 19, cex = 1.2,
+       xlab = list(label = "Slope", cex = 2.2),
+       ylab = list(label = "Number of years", cex = 2.2),
+       scales=list(cex = 1.5),
        abline=c(v=0, lwd = 3))
 dev.off()
-
-xyplot(mod.sbcoastal$slope ~ mod.sbcoastal$start_year | mod.sbcoastal$trophic_level,
-       col = ifelse(mod.sbcoastal$p_value < 0.05,'red','black'),
-       pch = 19, cex = 1,
-       strip = strip.custom(bg="lightgrey", par.strip.text=list(col="black", cex = 1, font = 2)),
-       xlab = "Start Year", ylab = "Slope", abline=c(h=0, lwd = 3))
 
